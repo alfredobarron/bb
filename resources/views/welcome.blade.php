@@ -1,13 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">BB Aplication</div>
-            </div>
-        </div>
-    </div>
+<div class="bg-img">
+  <div class="intro-text">
+      <div class="intro-lead-in">Welcome To My Possessions!</div>
+      <div class="intro-heading">It's Nice To Meet You</div>
+      <a href="#" class="page-scroll btn btn-xl">Tell Me More</a>
+  </div>
 </div>
 @endsection

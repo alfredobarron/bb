@@ -221,6 +221,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -234,6 +251,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     };
   },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get('/possession/all/byUser').then(function (response) {
+      _this.possessions = response.data;
+    });
+  },
 
 
   filters: {
@@ -243,29 +267,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   methods: {
-    create: function create() {
-      var _this = this;
+    createItem: function createItem() {
+      var _this2 = this;
 
-      axios.post('/possession/store', this.form).then(function (response) {
-        console.log(response);
-        console.log(_this.form);
-        _this.possessions.unshift(_this.form);
-        _this.form = {
+      axios.post('/possession', this.form).then(function (response) {
+        _this2.possessions.unshift(response.data);
+        _this2.form = {
           title: '',
           description: ''
         };
         $('#collapse').collapse('hide');
       });
+    },
+    deleteItem: function deleteItem(id, index) {
+      var _this3 = this;
+
+      axios.delete('/possession/' + id).then(function (response) {
+        _this3.possessions.splice(index, 1);
+      });
     }
-  },
-
-  created: function created() {
-    var _this2 = this;
-
-    axios.get('/possession/all/byUser').then(function (response) {
-      _this2.possessions = response.data;
-    });
   }
+
 };
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2)))
 
@@ -331,7 +353,7 @@ exports = module.exports = __webpack_require__(148)();
 
 
 // module
-exports.push([module.i, "\n.collapse.possession-create.collapsing {\n  -webkit-transition: none;\n  transition: none;\n}\nul.possessions .close {\n  font-size: 14px;\n}\nul.possessions h4 {\n  margin-bottom: 4px;\n}\nul.possessions .tags .label {\n  font-size: 14px;\n  margin-right: 3px;\n}\nul.possessions .shared li {\n  padding-left: 0;\n  padding-right: 0;\n}\nul.possessions .shared li img {\n    border-radius: 50%;\n    height: 35px;\n    width: 35px;\n}\nul.possessions .attach {\n  margin-top: 10px;\n  margin-bottom: 20px;\n}\nul.possessions .attach li {\n    padding-left: 2;\n    padding-right: 2;\n}\n", ""]);
+exports.push([module.i, "\n.possession-create.collapsing {\n  -webkit-transition: none;\n  transition: none;\n}\nul.possessions li .close {\n  opacity: 0;\n  filter: alpha(opacity=0);\n}\nul.possessions li:hover .close {\n  opacity: 0.3;\n  filter: alpha(opacity=30);\n}\nul.possessions li .btn-round {\n  border-radius: 50%;\n}\nul.possessions li .border-dashed {\n  border-style: dashed;\n}\nul.possessions h4 {\n  margin-bottom: 4px;\n}\nul.possessions .tags .label {\n  font-size: 13px;\n  margin-right: 3px;\n  font-weight: normal;\n}\nul.possessions .shared li {\n  padding-left: 1px;\n  padding-right: 1px;\n}\nul.possessions .shared li img {\n    border-radius: 50%;\n    height: 35px;\n    width: 35px;\n}\nul.possessions .attach {\n  margin-top: 10px;\n  margin-bottom: 20px;\n}\nul.possessions .attach li {\n    padding-left: 1px;\n    padding-right: 1px;\n}\nul.possessions .attach li img {\n      height: 45px;\n      width: 45px;\n}\n", ""]);
 
 // exports
 
@@ -550,22 +572,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.form.description = $event.target.value
       }
     }
-  })])]), _vm._v(" "), _vm._m(0), _vm._v(" "), _vm._m(1), _vm._v(" "), _c('div', {
-    staticClass: "col-md-12 text-right"
-  }, [_c('button', {
-    staticClass: "btn btn-default",
+  })])]), _vm._v(" "), _vm._m(0), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6 shared text-right"
+  }, [_vm._m(1), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-sm btn-default",
     attrs: {
       "type": "button",
       "data-toggle": "collapse",
       "data-target": "#collapse"
     }
   }, [_vm._v("Cancel")]), _vm._v(" "), _c('button', {
-    staticClass: "btn btn-success",
+    staticClass: "btn btn-sm btn-success",
     attrs: {
       "type": "button"
     },
     on: {
-      "click": _vm.create
+      "click": _vm.createItem
     }
   }, [_vm._v("Create")])])])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "row"
@@ -577,120 +599,146 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel-body"
   }, [_c('ul', {
     staticClass: "list-unstyled possessions"
-  }, _vm._l((_vm.possessions), function(item) {
+  }, _vm._l((_vm.possessions), function(item, index) {
     return _c('li', [_c('div', {
       staticClass: "row"
     }, [_c('div', {
       staticClass: "col-md-12"
-    }, [_vm._m(2, true), _vm._v(" "), _c('h4', [_vm._v(_vm._s(item.title))]), _vm._v(" "), _c('p', [_c('small', [_vm._v(_vm._s(item.description))])])]), _vm._v(" "), _c('div', {
-      staticClass: "col-md-6 tags"
-    }, [_vm._l((item.tags), function(tag) {
+    }, [_c('h4', [_vm._v(_vm._s(item.title))]), _vm._v(" "), _c('p', [_c('small', [_vm._v(_vm._s(item.description))])])]), _vm._v(" "), _c('div', {
+      staticClass: "col-md-8 tags"
+    }, [_vm._m(2, true), _vm._v(" "), _vm._m(3, true), _vm._v(" "), _c('i', {
+      staticClass: "fa fa-lg fa-fw fa-tag text-muted",
+      attrs: {
+        "aria-hidden": "true"
+      }
+    }), _vm._v(" "), _vm._l((item.tags), function(tag) {
       return _c('span', {
         staticClass: "label label-info"
       }, [_vm._v(_vm._s(tag.title))])
-    }), _vm._v(" "), _vm._m(3, true), _vm._v(" "), _vm._m(4, true)], 2), _vm._v(" "), _vm._m(5, true)]), _vm._v(" "), _c('div', {
+    }), _vm._v(" "), _vm._m(4, true)], 2), _vm._v(" "), _c('div', {
+      staticClass: "col-md-4 shared"
+    }, [_c('ul', {
+      staticClass: "list-inline shared text-right"
+    }, [_vm._m(5, true), _vm._v(" "), _vm._l((item.share), function(share, index) {
+      return (index < 3) ? _c('li', [_c('img', {
+        attrs: {
+          "src": share.avatar,
+          "alt": ""
+        }
+      })]) : _vm._e()
+    }), _vm._v(" "), (item.share.length > 3) ? _c('li', [_c('a', {
+      staticClass: "btn btn-default btn-round border-dashed",
+      attrs: {
+        "href": "#"
+      }
+    }, [_vm._v("\n                        +" + _vm._s(item.share.length - 3) + "\n                      ")])]) : _vm._e(), _vm._v(" "), _vm._m(6, true)], 2)])]), _vm._v(" "), _c('div', {
       staticClass: "row attach"
-    }, [_vm._m(6, true), _vm._v(" "), _c('div', {
+    }, [_vm._m(7, true), _vm._v(" "), _c('div', {
       staticClass: "col-md-2 text-right"
     }, [_c('p', {
       staticClass: "text-muted"
-    }, [_c('small', [_vm._v(_vm._s(_vm._f("ago")(item.created_at)))])])])]), _vm._v(" "), _c('hr')])
+    }, [_c('small', [_vm._v(_vm._s(_vm._f("ago")(item.created_at)))])]), _vm._v(" "), _c('button', {
+      staticClass: "close",
+      attrs: {
+        "type": "button",
+        "aria-label": "Close"
+      },
+      on: {
+        "click": function($event) {
+          _vm.deleteItem(item.id, index)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "fa fa-trash-o",
+      attrs: {
+        "aria-hidden": "true"
+      }
+    })])])]), _vm._v(" "), _c('hr')])
   }))])])])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "col-md-6 tags"
   }, [_c('a', {
-    staticClass: "btn btn-sm",
+    staticClass: "btn btn-link btn-sm",
     attrs: {
       "href": "#"
     }
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-tag"
-  }), _vm._v(" Tag")]), _vm._v(" "), _c('a', {
-    staticClass: "btn btn-sm",
+  }, [_c('i', {
+    staticClass: "fa fa-lg fa-fw fa-tag",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v(" Tag\n                ")]), _vm._v(" "), _c('a', {
+    staticClass: "btn btn-link btn-sm",
     attrs: {
       "href": "#"
     }
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-paperclip"
-  }), _vm._v(" Attach")])])
+  }, [_c('i', {
+    staticClass: "fa fa-lg fa-fw fa-paperclip",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v(" Attach\n                ")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "col-md-6 shared"
-  }, [_c('ul', {
-    staticClass: "list-inline shared text-right"
-  }, [_c('li', [_c('a', {
-    staticClass: "btn btn-sm",
+  return _c('a', {
+    staticClass: "btn btn-link btn-sm",
     attrs: {
       "href": "#"
     }
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-share-alt"
-  }), _vm._v(" Shared")])])])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('button', {
-    staticClass: "close",
+  }, [_c('i', {
+    staticClass: "fa fa-lg fa-fw fa-share-alt",
     attrs: {
-      "type": "button",
-      "aria-label": "Close"
+      "aria-hidden": "true"
     }
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-trash",
+  }), _vm._v(" Share\n                ")])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('a', {
+    attrs: {
+      "href": "#"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-lg fa-star-o",
     attrs: {
       "aria-hidden": "true"
     }
   })])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('a', {
-    staticClass: "btn btn-sm",
+    staticClass: "btn btn-link",
     attrs: {
       "href": "#"
     }
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-tag"
-  }), _vm._v(" Tag")])
+  }, [_c('i', {
+    staticClass: "fa fa-lg fa-fw fa-paperclip",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v(" "), _c('small', [_vm._v("Attach")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('a', {
-    staticClass: "btn btn-sm",
+    staticClass: "btn btn-default btn-xs",
     attrs: {
       "href": "#"
     }
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-paperclip"
-  }), _vm._v(" Attach")])
+  }, [_c('i', {
+    staticClass: "fa fa-plus"
+  }), _vm._v(" Tag\n                  ")])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "col-md-6 shared"
-  }, [_c('ul', {
-    staticClass: "list-inline shared text-right"
-  }, [_c('li', [_c('a', {
-    staticClass: "btn btn-sm",
+  return _c('li', [_c('i', {
+    staticClass: "fa fa-fw fa-share-alt",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v(" "), _c('small', [_vm._v("Share")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('li', [_c('a', {
+    staticClass: "btn btn-default btn-round",
     attrs: {
       "href": "#"
     }
-  }, [_c('span', {
-    staticClass: "glyphicon glyphicon-share-alt"
-  }), _vm._v(" Shared")])]), _vm._v(" "), _c('li', [_c('img', {
-    attrs: {
-      "src": "http://lorempixel.com/48/48/people/1",
-      "alt": ""
-    }
-  })]), _vm._v(" "), _c('li', [_c('img', {
-    attrs: {
-      "src": "http://lorempixel.com/48/48/people/2",
-      "alt": ""
-    }
-  })]), _vm._v(" "), _c('li', [_c('img', {
-    attrs: {
-      "src": "http://lorempixel.com/48/48/people/3",
-      "alt": ""
-    }
-  })]), _vm._v(" "), _c('li', [_c('img', {
-    attrs: {
-      "src": "http://lorempixel.com/48/48/people/4",
-      "alt": ""
-    }
-  })])])])
+  }, [_c('i', {
+    staticClass: "fa fa-plus"
+  })])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "col-md-10"

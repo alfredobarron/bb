@@ -27,7 +27,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'curp' => $faker->regexify('[A-Z0-9]{10}'),
         'imss' => $faker->regexify('[A-Z0-9]{10}'),
         'cedula' => $faker->regexify('[A-Z0-9]{10}'),
-        'avatar' => $faker->imageUrl($width = 640, $height = 480),
+        'avatar' => $faker->imageUrl(45, 45, 'people'),
         'connections' => $faker->shuffle([1, 2, 3])
     ];
 });

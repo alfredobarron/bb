@@ -3,19 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Possession extends Model
 {
-    /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'permissions' => 'array'
-    ];
+    use SoftDeletes;
 
-    protected $fillable = ['title', 'description', 'permissions', 'user_id'];
+    protected $dates = ['deleted_at'];
+
+    protected $fillable = ['title', 'description', 'user_id'];
 
     public function user()
     {
@@ -25,6 +21,11 @@ class Possession extends Model
     public function tags()
     {
       return $this->belongsToMany(Tag::class);
+    }
+
+    public function share()
+    {
+      return $this->belongsToMany(User::class, 'possession_share');
     }
 
 }

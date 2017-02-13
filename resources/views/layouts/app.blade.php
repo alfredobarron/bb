@@ -34,15 +34,18 @@
                         <span class="icon-bar"></span>
                     </button>
 
-                    <a class="navbar-brand" href="{{ url('/home') }}">
-                        <span class="glyphicon glyphicon-lock"></span>
-                         Possessions
-                    </a>
+                    @if (Auth::guest())
+                        <a class="navbar-brand" href="{{ url('/') }}">
+                            <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+                             My Possessions
+                        </a>
+                    @else
+                        <a class="navbar-brand" href="{{ url('/home') }}">
+                            <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+                             My Possessions
+                        </a>
+                    @endif
 
-                    <!-- Branding Image -->
-                    <a class="navbar-brand navbar-brand-centered" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
-                    </a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
@@ -61,6 +64,7 @@
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    <img src="{{Auth::user()->avatar}}" alt="">
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 

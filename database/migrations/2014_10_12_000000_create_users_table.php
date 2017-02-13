@@ -30,6 +30,7 @@ class CreateUsersTable extends Migration
             $table->string('cedula')->nullable();
             $table->string('avatar')->nullable();
             $table->json('connections')->nullable();
+            $table->softDeletes();
         });
     }
 

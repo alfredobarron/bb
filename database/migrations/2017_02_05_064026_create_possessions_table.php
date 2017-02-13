@@ -17,10 +17,17 @@ class CreatePossessionsTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->text('description');
-            $table->json('permissions')->nullable();
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
+            $table->softDeletes();
+        });
+
+        Schema::create('tags', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('title')->unique();
+            $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('possession_files', function (Blueprint $table) {
@@ -31,18 +38,19 @@ class CreatePossessionsTable extends Migration
             $table->integer('possession_id')->unsigned();
             $table->foreign('possession_id')->references('id')->on('possessions');
             $table->timestamps();
-        });
-
-        Schema::create('tags', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('title')->unique();
-            $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('possession_tag', function (Blueprint $table) {
             $table->integer('possession_id');
             $table->integer('tag_id');
             $table->primary(['possession_id', 'tag_id']);
+        });
+
+        Schema::create('possession_share', function (Blueprint $table) {
+            $table->integer('possession_id');
+            $table->integer('user_id');
+            $table->primary(['possession_id', 'user_id']);
         });
     }
 
@@ -53,9 +61,10 @@ class CreatePossessionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tags');
         Schema::dropIfExists('possession_tag');
+        Schema::dropIfExists('possession_share');
         Schema::dropIfExists('possession_files');
+        Schema::dropIfExists('tags');
         Schema::dropIfExists('possessions');
     }
 }

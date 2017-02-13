@@ -21,6 +21,8 @@ Auth::routes();
 
 Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/home', 'PossessionController@index');
+
     Route::get('/possession/all/byUser', 'PossessionController@byUser');
-    Route::post('/possession/store', 'PossessionController@store');
+    Route::post('/possession', 'PossessionController@store');
+    Route::delete('/possession/{id}', 'PossessionController@destroy');
 });

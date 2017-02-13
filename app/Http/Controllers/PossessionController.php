@@ -15,7 +15,7 @@ class PossessionController extends Controller
 
     public function byUser()
     {
-        return Possession::with('tags')->where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
+        return Possession::with('tags', 'share')->where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
     }
 
     public function store(Request $request)
@@ -25,12 +25,13 @@ class PossessionController extends Controller
             'description' => 'required',
         ]);
 
-        return Possession::create([
+        $q = Possession::create([
             'title' => $request->title,
             'description' => $request->description,
             'user_id' => Auth::id()
         ]);
 
+        return Possession::with('tags', 'share')->find($q->id);
     }
 
     public function update(Request $request, $id)
@@ -40,6 +41,6 @@ class PossessionController extends Controller
 
     public function destroy($id)
     {
-        return Possession::delete($id);
+        $q = Possession::destroy($id);
     }
 }

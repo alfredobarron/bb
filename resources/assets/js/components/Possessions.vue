@@ -16,20 +16,20 @@
                 </div>
                 <!-- Tags -->
                 <div class="col-md-6 tags">
-                  <a href="#" class="btn btn-sm"><span class="glyphicon glyphicon-tag"></span> Tag</a>
-                  <a href="#" class="btn btn-sm"><span class="glyphicon glyphicon-paperclip"></span> Attach</a>
+                  <a href="#" class="btn btn-link btn-sm">
+                    <i class="fa fa-lg fa-fw fa-tag" aria-hidden="true"></i> Tag
+                  </a>
+                  <a href="#" class="btn btn-link btn-sm">
+                    <i class="fa fa-lg fa-fw fa-paperclip" aria-hidden="true"></i> Attach
+                  </a>
                 </div>
                 <!-- Shared -->
-                <div class="col-md-6 shared">
-                  <ul class="list-inline shared text-right">
-                    <li><a href="#" class="btn btn-sm"><span class="glyphicon glyphicon-share-alt"></span> Shared</a></li>
-                  </ul>
-                </div>
-                <!-- Action Buttons-->
-                <div class="col-md-12 text-right">
-                  <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#collapse">Cancel</button>
-                  <button type="button" class="btn btn-success" v-on:click="create">Create</button>
-                  </ul>
+                <div class="col-md-6 shared text-right">
+                  <a href="#" class="btn btn-link btn-sm">
+                    <i class="fa fa-lg fa-fw fa-share-alt" aria-hidden="true"></i> Share
+                  </a>
+                  <button type="button" class="btn btn-sm btn-default" data-toggle="collapse" data-target="#collapse">Cancel</button>
+                  <button type="button" class="btn btn-sm btn-success" v-on:click="createItem">Create</button>
                 </div>
               </div>
             </div>
@@ -42,34 +42,49 @@
         <div class="panel panel-default">
           <div class="panel-body">
             <ul class="list-unstyled possessions">
-              <li v-for="item in possessions">
-
+              <li v-for="(item, index) in possessions">
                 <div class="row">
                   <div class="col-md-12">
-                    <button type="button" class="close" aria-label="Close"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
                     <h4>{{item.title}}</h4>
                     <p><small>{{item.description}}</small></p>
                   </div>
                   <!-- Tags -->
-                  <div class="col-md-6 tags">
+                  <div class="col-md-8 tags">
+                    <a href="#"><i class="fa fa-lg fa-star-o" aria-hidden="true"></i></a>
+                    <a href="#" class="btn btn-link">
+                      <i class="fa fa-lg fa-fw fa-paperclip" aria-hidden="true"></i> <small>Attach</small>
+                    </a>
+                    <i class="fa fa-lg fa-fw fa-tag text-muted" aria-hidden="true"></i>
                     <span class="label label-info" v-for="tag in item.tags">{{tag.title}}</span>
-                    <a href="#" class="btn btn-sm"><span class="glyphicon glyphicon-tag"></span> Tag</a>
-                    <a href="#" class="btn btn-sm"><span class="glyphicon glyphicon-paperclip"></span> Attach</a>
+                    <a href="#" class="btn btn-default btn-xs">
+                      <i class="fa fa-plus"></i> Tag
+                    </a>
                   </div>
                   <!-- Shared -->
-                  <div class="col-md-6 shared">
+                  <div class="col-md-4 shared">
                     <ul class="list-inline shared text-right">
-                      <li><a href="#" class="btn btn-sm"><span class="glyphicon glyphicon-share-alt"></span> Shared</a></li>
-                      <li><img src="http://lorempixel.com/48/48/people/1" alt=""></li>
-                      <li><img src="http://lorempixel.com/48/48/people/2" alt=""></li>
-                      <li><img src="http://lorempixel.com/48/48/people/3" alt=""></li>
-                      <li><img src="http://lorempixel.com/48/48/people/4" alt=""></li>
+                      <li>
+                        <i class="fa fa-fw fa-share-alt" aria-hidden="true"></i> <small>Share</small>
+                      </a>
+                      </li>
+                      <li v-for="(share, index) in item.share" v-if="index<3">
+                        <img :src="share.avatar" alt="">
+                      </li>
+                      <li v-if="item.share.length>3">
+                        <a href="#" class="btn btn-default btn-round border-dashed">
+                          +{{item.share.length - 3}}
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" class="btn btn-default btn-round">
+                          <i class="fa fa-plus"></i>
+                        </a>
+                      </li>
                     </ul>
                   </div>
                 </div>
-
+                <!-- Attach-->
                 <div class="row attach">
-                  <!-- Attach-->
                   <div class="col-md-10">
                     <ul class="list-inline">
                       <li><img src="http://lorempixel.com/48/48/business/1" alt=""></li>
@@ -80,9 +95,11 @@
                   </div>
                   <div class="col-md-2 text-right">
                     <p class="text-muted"><small>{{item.created_at | ago}}</small></p>
+                    <button type="button" class="close" aria-label="Close" v-on:click="deleteItem(item.id, index)">
+                      <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </button>
                   </div>
                 </div>
-
                 <hr>
               </li>
             </ul>
@@ -107,6 +124,12 @@
       }
     },
 
+    mounted() {
+      axios.get('/possession/all/byUser').then(response => {
+        this.possessions = response.data;
+      });
+    },
+
     filters: {
       ago(date) {
         return moment(date).fromNow();
@@ -114,50 +137,63 @@
     },
 
     methods: {
-      create: function () {
-        axios.post('/possession/store', this.form).then(response => {
-          console.log(response);
-          console.log(this.form);
-          this.possessions.unshift(this.form);
+      createItem: function () {
+        axios.post('/possession', this.form).then(response => {
+          this.possessions.unshift(response.data);
           this.form = {
             title: '',
             description: ''
           };
           $('#collapse').collapse('hide');
         });
+      },
+      deleteItem: function (id, index) {
+        axios.delete('/possession/' + id).then(response => {
+          this.possessions.splice(index, 1);
+        });
       }
-    },
-
-    created() {
-      axios.get('/possession/all/byUser').then(response => {
-        this.possessions = response.data;
-      });
     }
 
   }
 </script>
 
 <style lang="scss">
-  .collapse.possession-create.collapsing {
+  .possession-create.collapsing {
     -webkit-transition: none;
     transition: none;
   }
 
   ul.possessions {
-    .close {
-      font-size: 14px;
+    li {
+      .close {
+        opacity: 0;
+        filter: alpha(opacity=0);
+      }
+      &:hover .close {
+        opacity: 0.3;
+        filter: alpha(opacity=30);
+      }
+      .btn-round {
+        border-radius: 50%;
+      }
+      .border-dashed {
+        border-style: dashed;
+      }
     }
     h4 {
       margin-bottom: 4px;
     }
-    .tags .label {
-      font-size: 14px;
-      margin-right: 3px;
+    .tags {
+      .label {
+        font-size: 13px;
+        margin-right: 3px;
+        font-weight: normal;
+      }
     }
     .shared {
       li {
-        padding-left: 0;
-        padding-right: 0;
+        padding-left: 1px;
+        padding-right: 1px;
         img {
           border-radius: 50%;
           height: 35px;
@@ -169,8 +205,12 @@
       margin-top:10px;
       margin-bottom: 20px;
       li {
-        padding-left: 2;
-        padding-right: 2;
+        padding-left: 1px;
+        padding-right: 1px;
+        img {
+          height: 45px;
+          width: 45px;
+        }
       }
     }
 
