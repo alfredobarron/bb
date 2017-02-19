@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <!-- Create collapse -->
     <div class="collapse possession-create" id="collapse">
       <div class="row">
         <div class="col-md-12">
@@ -37,6 +38,7 @@
         </div>
       </div>
     </div>
+    <!-- List -->
     <div class="row">
       <div class="col-md-12">
         <div class="panel panel-default">
@@ -50,13 +52,18 @@
                   </div>
                   <!-- Tags -->
                   <div class="col-md-8 tags">
-                    <a href="#"><i class="fa fa-lg fa-star-o" aria-hidden="true"></i></a>
-                    <a href="#" class="btn btn-link">
-                      <i class="fa fa-lg fa-fw fa-paperclip" aria-hidden="true"></i> <small>Attach</small>
+                    <!-- Favorite -->
+                    <a href="#" v-on:click="comingSoon">
+                      <i class="fa fa-lg fa-star-o" aria-hidden="true"></i>
                     </a>
+                    <a href="#" class="btn btn-link" v-on:click="comingSoon">
+                      <i class="fa fa-lg fa-fw fa-paperclip" aria-hidden="true"></i>
+                      <small>Attach</small>
+                    </a>
+                    <!-- List Tags -->
                     <i class="fa fa-lg fa-fw fa-tag text-muted" aria-hidden="true"></i>
                     <span class="label label-info" v-for="tag in item.tags">{{tag.title}}</span>
-                    <a href="#" class="btn btn-default btn-xs">
+                    <a href="#" class="btn btn-default btn-xs" v-on:click="comingSoon">
                       <i class="fa fa-plus"></i> Tag
                     </a>
                   </div>
@@ -64,19 +71,22 @@
                   <div class="col-md-4 shared">
                     <ul class="list-inline shared text-right">
                       <li>
-                        <i class="fa fa-fw fa-share-alt" aria-hidden="true"></i> <small>Share</small>
-                      </a>
+                        <i class="fa fa-fw fa-share-alt" aria-hidden="true"></i>
+                        <small>Share</small>
                       </li>
+                      <!-- List Users shared -->
                       <li v-for="(share, index) in item.share" v-if="index<3">
                         <img :src="share.avatar" alt="">
                       </li>
+                      <!-- Count Users-->
                       <li v-if="item.share.length>3">
                         <a href="#" class="btn btn-default btn-round border-dashed">
                           +{{item.share.length - 3}}
                         </a>
                       </li>
+                      <!-- Add user -->
                       <li>
-                        <a href="#" class="btn btn-default btn-round">
+                        <a href="#" class="btn btn-default btn-round" v-on:click="comingSoon">
                           <i class="fa fa-plus"></i>
                         </a>
                       </li>
@@ -85,6 +95,7 @@
                 </div>
                 <!-- Attach-->
                 <div class="row attach">
+                  <!-- List Attached Files -->
                   <div class="col-md-10">
                     <ul class="list-inline">
                       <li><img src="http://lorempixel.com/48/48/business/1" alt=""></li>
@@ -93,6 +104,7 @@
                       <li><img src="http://lorempixel.com/48/48/business/4" alt=""></li>
                     </ul>
                   </div>
+                  <!-- Date & Delete button -->
                   <div class="col-md-2 text-right">
                     <p class="text-muted"><small>{{item.created_at | ago}}</small></p>
                     <button type="button" class="close" aria-label="Close" v-on:click="deleteItem(item.id, index)">
@@ -112,6 +124,8 @@
 
 <script>
   import moment from 'moment';
+  import swal from 'sweetalert';
+
 
   export default {
     data() {
@@ -151,7 +165,14 @@
         axios.delete('/possession/' + id).then(response => {
           this.possessions.splice(index, 1);
         });
+      },
+      comingSoon: function () {
+        swal('Coming soon...');
       }
+      // addTag: function () {
+      //   alert('Coming soon... Add tag');
+      //   alert('Coming soon... Add tag');
+      // }
     }
 
   }
