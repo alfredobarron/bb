@@ -23,11 +23,10 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,
         'birthday' => $faker->date($format = 'Y-m-d', $max = '1990-06-09'),
+        'avatar' => $faker->imageUrl(45, 45, 'people'),
         'ine' => $faker->regexify('[A-Z0-9]{10}'),
         'curp' => $faker->regexify('[A-Z0-9]{10}'),
         'imss' => $faker->regexify('[A-Z0-9]{10}'),
-        'cedula' => $faker->regexify('[A-Z0-9]{10}'),
-        'avatar' => $faker->imageUrl(45, 45, 'people'),
-        'connections' => $faker->shuffle([1, 2, 3])
+        'cedula' => $faker->regexify('[A-Z0-9]{10}')
     ];
 });
