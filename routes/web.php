@@ -22,7 +22,10 @@ Auth::routes();
 Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/home', 'PossessionController@index');
 
-    Route::get('/possession/all/byUser', 'PossessionController@byUser');
+    Route::get('/possession/byUser', 'PossessionController@byUser');
     Route::post('/possession', 'PossessionController@store');
     Route::delete('/possession/{id}', 'PossessionController@destroy');
+
+    Route::post('/possession/add_tag/{id}', 'PossessionController@addTag');
+
 });

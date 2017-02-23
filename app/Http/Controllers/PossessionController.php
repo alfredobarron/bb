@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Possession;
+use App\Tag;
 
 class PossessionController extends Controller
 {
@@ -25,13 +26,13 @@ class PossessionController extends Controller
             'description' => 'required',
         ]);
 
-        $q = Possession::create([
+        $poss = Possession::create([
             'title' => $request->title,
             'description' => $request->description,
             'user_id' => Auth::id()
         ]);
 
-        return Possession::with('tags', 'share')->find($q->id);
+        return Possession::with('tags', 'share')->find($poss->id);
     }
 
     public function update(Request $request, $id)
@@ -41,6 +42,23 @@ class PossessionController extends Controller
 
     public function destroy($id)
     {
-        $q = Possession::destroy($id);
+        return Possession::destroy($id);
+    }
+
+    public function addTag(Request $request, $id)
+    {
+        $this->validate($request, [
+            'title' => 'required|max:255'
+        ]);
+
+        $tag = Tag::firstOrCreate([
+            'title' => $request->title
+        ]);
+
+        $poss = Possession::find($id);
+
+        $poss->tags()->attach($tag->id);
+
+        return $tag;
     }
 }
