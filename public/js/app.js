@@ -297,6 +297,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -311,17 +346,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 description: ''
             },
             newTag: {
-                title: ''
+                data: {
+                    title: null
+                },
+                options: {
+                    show: false
+                }
             },
-            showNewTag: false
+            searchUser: '',
+            users: []
         };
-    },
-    mounted: function mounted() {
-        var _this = this;
-
-        axios.get('/possession/byUser').then(function (response) {
-            _this.possessions = response.data;
-        });
     },
 
 
@@ -330,6 +364,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return __WEBPACK_IMPORTED_MODULE_0_moment___default()(date).fromNow();
         }
     },
+
+    directives: {
+        'focus': function focus(el, value) {
+            if (value) {
+                setTimeout(function () {
+                    el.focus();
+                }, 0);
+            }
+        }
+    },
+
+    watch: {
+        searchUser: 'fetchUsers'
+    },
+
+    mounted: function mounted() {
+        var _this = this;
+
+        axios.get('/possession/byUser').then(function (response) {
+            _this.possessions = response.data;
+        });
+    },
+
 
     methods: {
         createItem: function createItem() {
@@ -367,22 +424,73 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
             });
         },
+
+        toogleFavorite: function toogleFavorite(possession) {
+            axios.post('/possession/favorite/' + possession.id).then(function (response) {
+                possession.favorite = response.data.favorite;
+            });
+        },
+
         comingSoon: function comingSoon() {
             __WEBPACK_IMPORTED_MODULE_1_sweetalert___default()('Coming soon...');
         },
+
         addTag: function addTag(possession) {
             var _this3 = this;
 
-            axios.post('/possession/add_tag/' + possession.id, this.newTag).then(function (response) {
-                possession.tags.push(response.data);
-                _this3.newTag = {
-                    title: ''
-                };
-                _this3.showNewTag = false;
-            });
-        }
-    }
+            if (this.newTag.data.title) {
+                axios.post('/possession/addTag/' + possession.id, this.newTag.data).then(function (response) {
+                    possession.tags.push(response.data);
+                    _this3.newTag = {
+                        data: {
+                            title: null
+                        },
+                        options: {
+                            show: false
+                        }
+                    };
+                });
+            } else {
+                this.newTag.options.show = possession;
+            }
+        },
+        cancelAddTag: function cancelAddTag() {
+            this.newTag = {
+                data: {
+                    title: null
+                },
+                options: {
+                    show: false
+                }
+            };
+        },
 
+        addShare: function addShare(possession, user) {
+            var _this4 = this;
+
+            if (possession && user) {
+                axios.get('/possession/addShare/' + possession.id + '/' + user.id).then(function (response) {
+                    possession.share.push(user);
+                    _this4.searchUser = '', _this4.users = [];
+                });
+            } else {
+                this.searchUser = '', this.users = [];
+            }
+        },
+
+        fetchUsers: function fetchUsers() {
+            var _this5 = this;
+
+            if (this.searchUser.length > 3) {
+                axios.get('/user/byNameOrEmail/' + this.searchUser).then(function (response) {
+                    _this5.users = response.data;
+                });
+            } else {
+                this.users = [];
+            }
+        }
+
+    }
 };
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2)))
 
@@ -448,7 +556,7 @@ exports = module.exports = __webpack_require__(152)();
 
 
 // module
-exports.push([module.i, "\n.possession-create.collapsing {\n  -webkit-transition: none;\n  transition: none;\n}\nul.possessions li .close {\n  opacity: 0;\n  filter: alpha(opacity=0);\n}\nul.possessions li:hover .close {\n  opacity: 0.3;\n  filter: alpha(opacity=30);\n}\nul.possessions li .btn-round {\n  border-radius: 50%;\n}\nul.possessions li .border-dashed {\n  border-style: dashed;\n}\nul.possessions h4 {\n  margin-bottom: 4px;\n}\nul.possessions .tags .label {\n  font-size: 13px;\n  margin-right: 3px;\n  font-weight: normal;\n}\nul.possessions .form-inline input {\n  display: none;\n}\nul.possessions .form-inline.show-new-tag input {\n  display: block;\n}\nul.possessions .form-inline.show-new-tag button {\n  display: none;\n}\nul.possessions .shared li {\n  padding-left: 1px;\n  padding-right: 1px;\n}\nul.possessions .shared li img {\n    border-radius: 50%;\n    height: 35px;\n    width: 35px;\n}\nul.possessions .attach {\n  margin-top: 10px;\n  margin-bottom: 20px;\n}\nul.possessions .attach li {\n    padding-left: 1px;\n    padding-right: 1px;\n}\nul.possessions .attach li img {\n      height: 45px;\n      width: 45px;\n}\n", ""]);
+exports.push([module.i, "\n.possession-create.collapsing {\n  -webkit-transition: none;\n  transition: none;\n}\n.panel-body {\n  padding: 0;\n}\nul.possessions > li {\n  padding: 20px 20px 30px;\n}\nul.possessions > li:nth-child(even) {\n    background: #f3f3f3;\n}\nul.possessions > li .btn-round {\n    border-radius: 50%;\n}\nul.possessions > li .border-dashed {\n    border-style: dashed;\n}\nul.possessions h4 {\n  margin-bottom: 4px;\n}\nul.possessions .tags .label {\n  font-size: 13px;\n  margin-right: 3px;\n  font-weight: normal;\n}\nul.possessions .shared li {\n  padding-left: 1px;\n  padding-right: 1px;\n}\nul.possessions .shared li img {\n    border-radius: 50%;\n    height: 35px;\n    width: 35px;\n}\nul.possessions .shared li .dropdown-menu {\n    padding: 10px;\n}\nul.possessions .shared li .dropdown-menu .list-group {\n      margin: 10px 0;\n}\nul.possessions .attach {\n  margin-top: 10px;\n  margin-bottom: 20px;\n}\nul.possessions .attach li {\n    padding-left: 1px;\n    padding-right: 1px;\n}\nul.possessions .attach li img {\n      height: 45px;\n      width: 45px;\n}\n", ""]);
 
 // exports
 
@@ -1344,7 +1452,7 @@ var Component = __webpack_require__(126)(
   /* cssModules */
   null
 )
-Component.options.__file = "/var/www/bb/resources/assets/js/components/Example.vue"
+Component.options.__file = "/Users/alfredobarron/Code/bb/resources/assets/js/components/Example.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Example.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -1383,7 +1491,7 @@ var Component = __webpack_require__(126)(
   /* cssModules */
   null
 )
-Component.options.__file = "/var/www/bb/resources/assets/js/components/Possessions.vue"
+Component.options.__file = "/Users/alfredobarron/Code/bb/resources/assets/js/components/Possessions.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Possessions.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -1446,10 +1554,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "id": "collapse"
     }
-  }, [_c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-12"
   }, [_c('div', {
     staticClass: "panel panel-default"
   }, [_c('div', {
@@ -1521,11 +1625,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.createItem
     }
-  }, [_vm._v("Create")])])])])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-12"
-  }, [_c('div', {
+  }, [_vm._v("Create")])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "panel panel-default"
   }, [_c('div', {
     staticClass: "panel-body"
@@ -1536,16 +1636,29 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "row"
     }, [_c('div', {
       staticClass: "col-md-12"
-    }, [_c('h4', [_vm._v(_vm._s(item.title))]), _vm._v(" "), _c('p', [_c('small', [_vm._v(_vm._s(item.description))])])]), _vm._v(" "), _c('div', {
+    }, [_c('h4', [_vm._v(_vm._s(item.title))]), _vm._v(" "), _c('p', [_c('small', [_vm._v(_vm._s(item.description))])])]), _vm._v(" "), _vm._m(2, true), _vm._v(" "), _c('div', {
+      staticClass: "col-md-2 text-right"
+    }, [_c('p', {
+      staticClass: "text-muted"
+    }, [_c('small', [_vm._v(_vm._s(_vm._f("ago")(item.created_at)))])])]), _vm._v(" "), _c('div', {
       staticClass: "col-md-8 tags"
     }, [_c('a', {
+      staticClass: "text-warning",
       attrs: {
         "href": ""
       },
       on: {
-        "click": _vm.comingSoon
+        "click": function($event) {
+          $event.preventDefault();
+          _vm.toogleFavorite(item)
+        }
       }
-    }, [_c('i', {
+    }, [(item.favorite) ? _c('i', {
+      staticClass: "fa fa-star fa-lg",
+      attrs: {
+        "aria-hidden": "true"
+      }
+    }) : _c('i', {
       staticClass: "fa fa-star-o fa-lg",
       attrs: {
         "aria-hidden": "true"
@@ -1556,39 +1669,67 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "href": ""
       },
       on: {
-        "click": _vm.comingSoon
+        "click": function($event) {
+          $event.preventDefault();
+          _vm.comingSoon($event)
+        }
       }
     }, [_c('i', {
       staticClass: "fa fa-paperclip fa-fw",
       attrs: {
         "aria-hidden": "true"
       }
-    }), _vm._v(" "), _c('small', [_vm._v("Attach")])]), _vm._v(" "), _vm._l((item.tags), function(tag) {
-      return _c('span', {
-        staticClass: "label label-info"
-      }, [_vm._v(_vm._s(tag.title))])
-    }), _vm._v(" "), _c('span', {
-      staticClass: "form-inline",
-      class: {
-        'show-new-tag': _vm.showNewTag
+    }), _vm._v("\n                                Attach\n                            ")]), _vm._v(" "), _c('a', {
+      staticClass: "btn btn-link",
+      attrs: {
+        "href": ""
+      },
+      on: {
+        "click": function($event) {
+          $event.preventDefault();
+          _vm.deleteItem(item.id, index)
+        }
       }
-    }, [_c('button', {
+    }, [_c('i', {
+      staticClass: "fa fa-trash-o",
+      attrs: {
+        "aria-hidden": "true"
+      }
+    }), _vm._v("\n                                Delete\n                            ")]), _vm._v(" "), _c('button', {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: (_vm.newTag.options.show != item),
+        expression: "newTag.options.show != item"
+      }],
       staticClass: "btn btn-default btn-xs",
       on: {
         "click": function($event) {
-          _vm.showNewTag = true
+          _vm.addTag(item)
         }
       }
     }, [_c('i', {
       staticClass: "fa fa-tag fa-fw"
-    }), _vm._v(" Add Tag\n                                        ")]), _vm._v(" "), _c('div', {
+    }), _vm._v(" Add Tag\n                            ")]), _vm._v(" "), _c('span', {
+      staticClass: "form-inline"
+    }, [_c('div', {
       staticClass: "form-group"
     }, [_c('input', {
       directives: [{
         name: "model",
         rawName: "v-model",
-        value: (_vm.newTag.title),
-        expression: "newTag.title"
+        value: (_vm.newTag.data.title),
+        expression: "newTag.data.title"
+      }, {
+        name: "show",
+        rawName: "v-show",
+        value: (_vm.newTag.options.show == item),
+        expression: "newTag.options.show == item"
+      }, {
+        name: "focus",
+        rawName: "v-focus",
+        value: (_vm.newTag.options.show == item),
+        expression: "newTag.options.show == item"
       }],
       staticClass: "form-control input-sm",
       attrs: {
@@ -1596,23 +1737,31 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "placeholder": "Bank, Account..."
       },
       domProps: {
-        "value": _vm._s(_vm.newTag.title)
+        "value": _vm._s(_vm.newTag.data.title)
       },
       on: {
-        "keyup": function($event) {
+        "keyup": [function($event) {
+          if (_vm._k($event.keyCode, "esc", 27)) { return; }
+          _vm.cancelAddTag($event)
+        }, function($event) {
           if (_vm._k($event.keyCode, "enter", 13)) { return; }
           _vm.addTag(item)
-        },
+        }],
+        "blur": _vm.cancelAddTag,
         "input": function($event) {
           if ($event.target.composing) { return; }
-          _vm.newTag.title = $event.target.value
+          _vm.newTag.data.title = $event.target.value
         }
       }
-    })])])], 2), _vm._v(" "), _c('div', {
+    })])]), _vm._v(" "), _vm._l((item.tags), function(tag) {
+      return _c('span', {
+        staticClass: "label label-primary"
+      }, [_vm._v(_vm._s(tag.title))])
+    })], 2), _vm._v(" "), _c('div', {
       staticClass: "col-md-4 shared"
     }, [_c('ul', {
       staticClass: "list-inline shared text-right"
-    }, [_vm._m(2, true), _vm._v(" "), _vm._l((item.share), function(share, index) {
+    }, [_vm._m(3, true), _vm._v(" "), _vm._l((item.share), function(share, index) {
       return (index < 3) ? _c('li', [_c('img', {
         attrs: {
           "src": share.avatar,
@@ -1622,42 +1771,96 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }), _vm._v(" "), (item.share.length > 3) ? _c('li', [_c('a', {
       staticClass: "btn btn-default btn-round border-dashed",
       attrs: {
-        "href": "#"
-      }
-    }, [_vm._v("\n                                                +" + _vm._s(item.share.length - 3) + "\n                                            ")])]) : _vm._e(), _vm._v(" "), _c('li', [_c('a', {
-      staticClass: "btn btn-default btn-round",
-      attrs: {
-        "href": "#"
-      },
-      on: {
-        "click": _vm.comingSoon
-      }
-    }, [_c('i', {
-      staticClass: "fa fa-plus"
-    })])])], 2)])]), _vm._v(" "), _c('div', {
-      staticClass: "row attach"
-    }, [_vm._m(3, true), _vm._v(" "), _c('div', {
-      staticClass: "col-md-2 text-right"
-    }, [_c('p', {
-      staticClass: "text-muted"
-    }, [_c('small', [_vm._v(_vm._s(_vm._f("ago")(item.created_at)))])]), _vm._v(" "), _c('button', {
-      staticClass: "close",
-      attrs: {
-        "type": "button",
-        "aria-label": "Close"
+        "href": ""
       },
       on: {
         "click": function($event) {
-          _vm.deleteItem(item.id, index)
+          $event.preventDefault();
+          _vm.comingSoon($event)
         }
       }
-    }, [_c('i', {
-      staticClass: "fa fa-trash-o",
+    }, [_vm._v("\n                                        +" + _vm._s(item.share.length - 3) + "\n                                    ")])]) : _vm._e(), _vm._v(" "), _c('li', [_c('div', {
+      staticClass: "dropdown"
+    }, [_c('a', {
+      staticClass: "btn btn-default btn-round",
       attrs: {
-        "aria-hidden": "true"
+        "href": "",
+        "data-toggle": "dropdown"
+      },
+      on: {
+        "click": _vm.addShare
       }
-    })])])]), _vm._v(" "), _c('hr')])
-  }))])])])])])
+    }, [_c('i', {
+      staticClass: "fa fa-plus"
+    })]), _vm._v(" "), _c('ul', {
+      staticClass: "dropdown-menu dropdown-menu-right"
+    }, [_c('li', {
+      staticClass: "dropdown-header"
+    }, [_vm._v("\n                                                Search by name or email address\n                                            ")]), _vm._v(" "), _c('li', {
+      staticClass: "divider",
+      attrs: {
+        "role": "separator"
+      }
+    }), _vm._v(" "), _c('li', [_c('input', {
+      directives: [{
+        name: "focus",
+        rawName: "v-focus.lazy",
+        value: (true),
+        expression: "true",
+        modifiers: {
+          "lazy": true
+        }
+      }, {
+        name: "model",
+        rawName: "v-model",
+        value: (_vm.searchUser),
+        expression: "searchUser"
+      }],
+      staticClass: "form-control",
+      attrs: {
+        "type": "text",
+        "placeholder": "Search"
+      },
+      domProps: {
+        "value": _vm._s(_vm.searchUser)
+      },
+      on: {
+        "input": function($event) {
+          if ($event.target.composing) { return; }
+          _vm.searchUser = $event.target.value
+        }
+      }
+    })]), _vm._v(" "), _c('li', [_c('div', {
+      staticClass: "list-group"
+    }, _vm._l((_vm.users), function(user, index) {
+      return _c('a', {
+        staticClass: "list-group-item",
+        attrs: {
+          "href": ""
+        },
+        on: {
+          "click": function($event) {
+            $event.preventDefault();
+            _vm.addShare(item, user)
+          }
+        }
+      }, [_c('div', {
+        staticClass: "media"
+      }, [_c('div', {
+        staticClass: "media-left"
+      }, [_c('img', {
+        staticClass: "media-object",
+        attrs: {
+          "src": user.avatar,
+          "alt": ""
+        }
+      })]), _vm._v(" "), _c('div', {
+        staticClass: "media-body"
+      }, [_c('strong', [_vm._v(_vm._s(user.name))]), _vm._v(" "), _c('small', {
+        staticClass: "text-muted"
+      }, [_vm._v(_vm._s(user.email))])])])])
+    }))])])])])], 2)])])])
+  }))])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "col-md-6 tags"
@@ -1695,10 +1898,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" Share\n                                ")])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('li', [_c('small', [_vm._v("Share")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "col-md-10"
+    staticClass: "col-md-10 attach"
   }, [_c('ul', {
     staticClass: "list-inline"
   }, [_c('li', [_c('img', {
@@ -1722,6 +1923,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "alt": ""
     }
   })])])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('li', [_c('small', [_vm._v("Share")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {

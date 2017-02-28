@@ -36,12 +36,12 @@
 
                     @if (Auth::guest())
                         <a class="navbar-brand" href="{{ url('/') }}">
-                            <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+                            <i class="fa fa-bookmark-o text-success" aria-hidden="true"></i>
                              My Possessions
                         </a>
                     @else
                         <a class="navbar-brand" href="{{ url('/home') }}">
-                            <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+                            <i class="fa fa-bookmark-o text-success" aria-hidden="true"></i>
                              My Possessions
                         </a>
                     @endif
@@ -87,7 +87,10 @@
                     </ul>
 
                     @if (!Auth::guest())
-                        <a href="#" class="btn btn-default btn-sm navbar-btn navbar-right" data-toggle="collapse" data-target="#collapse" aria-expanded="false"><span class="glyphicon glyphicon-plus"></span></a>
+                        <a href="#" class="btn btn-default btn-sm navbar-btn navbar-right"
+                           data-toggle="collapse" data-target="#collapse" aria-expanded="false">
+                            <span class="glyphicon glyphicon-plus text-success"></span>
+                        </a>
                     @endif
                 </div>
             </div>

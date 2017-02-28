@@ -11,7 +11,7 @@ class Possession extends Model
 
     protected $dates = ['deleted_at'];
 
-    protected $fillable = ['title', 'description', 'user_id'];
+    protected $fillable = ['title', 'description', 'favorite', 'user_id'];
 
     public function user()
     {

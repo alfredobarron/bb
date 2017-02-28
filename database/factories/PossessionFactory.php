@@ -16,7 +16,8 @@ $factory->define(App\Possession::class, function (Faker\Generator $faker) {
 
     return [
         'title' => $faker->text,
-        'description' => $faker->paragraph
+        'description' => $faker->paragraph,
+        'favorite' => false
         // 'user_id' => function () {
         //     return factory(App\User::class)->create()->id;
         // }

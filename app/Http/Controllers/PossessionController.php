@@ -57,8 +57,30 @@ class PossessionController extends Controller
 
         $poss = Possession::find($id);
 
-        $poss->tags()->attach($tag->id);
+        if (!$poss->tags->contains($tag->id)) {
+            $poss->tags()->attach($tag->id);
+        }
 
         return $tag;
+    }
+
+    public function addShare(Request $request, $id, $userId)
+    {
+        $poss = Possession::find($id);
+
+        if (!$poss->share->contains($userId)) {
+            $poss->share()->attach($userId);
+        }
+
+        return 'OK';
+    }
+
+    public function favorite(Request $request, $id)
+    {
+        $poss = Possession::find($id);
+        $poss->favorite = !$poss->favorite;
+        $poss->save();
+
+        return $poss;
     }
 }
