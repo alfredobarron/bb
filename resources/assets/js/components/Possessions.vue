@@ -37,7 +37,7 @@
                                         <i class="fa fa-share-alt fa-fw" aria-hidden="true"></i> Share
                                     </a>
                                     <button type="button" class="btn btn-sm btn-default" data-toggle="collapse" data-target="#collapse">Cancel</button>
-                                    <button type="button" class="btn btn-sm btn-success" @:click="createItem">Create</button>
+                                    <button type="button" class="btn btn-sm btn-success" @click="createItem">Create</button>
                                 </div>
                             </div>
                         </div>
@@ -229,7 +229,8 @@ export default {
                 this.possessions.unshift(response.data);
                 this.form = {
                     title: '',
-                    description: ''
+                    description: '',
+                    favorite: false
                 };
                 $('#collapse').collapse('hide');
             });
