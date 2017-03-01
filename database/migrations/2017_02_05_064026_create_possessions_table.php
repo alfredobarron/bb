@@ -15,7 +15,7 @@ class CreatePossessionsTable extends Migration
     {
         Schema::create('possessions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
+            $table->text('title');
             $table->text('description');
             $table->boolean('favorite')->default(false);
             $table->integer('user_id')->unsigned();
