@@ -332,6 +332,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -343,7 +352,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             possessions: [],
             form: {
                 title: '',
-                description: ''
+                description: '',
+                favorite: false
             },
             newTag: {
                 data: {
@@ -556,7 +566,7 @@ exports = module.exports = __webpack_require__(152)();
 
 
 // module
-exports.push([module.i, "\n.possession-create.collapsing {\n  -webkit-transition: none;\n  transition: none;\n}\n.panel-body {\n  padding: 0;\n}\nul.possessions > li {\n  padding: 20px 20px 30px;\n}\nul.possessions > li:nth-child(even) {\n    background: #f3f3f3;\n}\nul.possessions > li .btn-round {\n    border-radius: 50%;\n}\nul.possessions > li .border-dashed {\n    border-style: dashed;\n}\nul.possessions h4 {\n  margin-bottom: 4px;\n}\nul.possessions .tags .label {\n  font-size: 13px;\n  margin-right: 3px;\n  font-weight: normal;\n}\nul.possessions .shared li {\n  padding-left: 1px;\n  padding-right: 1px;\n}\nul.possessions .shared li img {\n    border-radius: 50%;\n    height: 35px;\n    width: 35px;\n}\nul.possessions .shared li .dropdown-menu {\n    padding: 10px;\n}\nul.possessions .shared li .dropdown-menu .list-group {\n      margin: 10px 0;\n}\nul.possessions .attach {\n  margin-top: 10px;\n  margin-bottom: 20px;\n}\nul.possessions .attach li {\n    padding-left: 1px;\n    padding-right: 1px;\n}\nul.possessions .attach li img {\n      height: 45px;\n      width: 45px;\n}\n", ""]);
+exports.push([module.i, "\n.possession-create.collapsing {\n  -webkit-transition: none;\n  transition: none;\n}\n.possessions .panel-body {\n  padding: 0 !important;\n}\n.possessions .panel-body ul.list-unstyled > li {\n    padding: 20px 20px 30px;\n}\n.possessions .panel-body ul.list-unstyled > li:nth-child(even) {\n      background: #f3f3f3;\n}\n.possessions .panel-body ul.list-unstyled > li h4 {\n      margin-bottom: 4px;\n}\n.possessions .panel-body ul.list-unstyled > li .btn-round {\n      border-radius: 50%;\n}\n.possessions .panel-body ul.list-unstyled > li .border-dashed {\n      border-style: dashed;\n}\n.possessions .panel-body ul.list-unstyled > li .attach {\n      padding-top: 10px;\n      padding-bottom: 20px;\n}\n.possessions .panel-body ul.list-unstyled > li .attach ul.list-inline {\n        margin-left: 0;\n}\n.possessions .panel-body ul.list-unstyled > li .attach ul.list-inline li {\n          padding-left: 1px;\n          padding-right: 1px;\n}\n.possessions .panel-body ul.list-unstyled > li .attach ul.list-inline li img {\n            height: 45px;\n            width: 45px;\n}\n.possessions .panel-body ul.list-unstyled > li .tags .label {\n      font-size: 13px;\n      margin-right: 3px;\n      font-weight: normal;\n}\n.possessions .panel-body ul.list-unstyled > li .shared li {\n      padding-left: 1px;\n      padding-right: 1px;\n}\n.possessions .panel-body ul.list-unstyled > li .shared li img {\n        border-radius: 50%;\n        height: 35px;\n        width: 35px;\n}\n.possessions .panel-body ul.list-unstyled > li .shared li .dropdown-menu {\n        padding: 10px;\n}\n.possessions .panel-body ul.list-unstyled > li .shared li .dropdown-menu .list-group {\n          margin: 10px 0;\n}\n", ""]);
 
 // exports
 
@@ -1608,9 +1618,71 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.form.description = $event.target.value
       }
     }
-  })])]), _vm._v(" "), _vm._m(0), _vm._v(" "), _c('div', {
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "col-md-6 tags"
+  }, [_c('a', {
+    staticClass: "text-warning",
+    attrs: {
+      "href": ""
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.form.favorite = !_vm.form.favorite
+      }
+    }
+  }, [(_vm.form.favorite) ? _c('i', {
+    staticClass: "fa fa-star fa-lg",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }) : _c('i', {
+    staticClass: "fa fa-star-o fa-lg",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  })]), _vm._v(" "), _c('a', {
+    staticClass: "btn btn-link",
+    attrs: {
+      "href": ""
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.comingSoon($event)
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-paperclip fa-fw",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v("\n                                    Attach\n                                ")]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-default btn-xs",
+    on: {
+      "click": _vm.comingSoon
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-tag fa-fw"
+  }), _vm._v(" Add Tag\n                                ")])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-6 shared text-right"
-  }, [_vm._m(1), _vm._v(" "), _c('button', {
+  }, [_c('a', {
+    staticClass: "btn btn-link",
+    attrs: {
+      "href": ""
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.comingSoon($event)
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-share-alt fa-fw",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v(" Share\n                                ")]), _vm._v(" "), _c('button', {
     staticClass: "btn btn-sm btn-default",
     attrs: {
       "type": "button",
@@ -1623,20 +1695,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "type": "button"
     },
     on: {
-      "click": _vm.createItem
+      ":click": _vm.createItem
     }
   }, [_vm._v("Create")])])])])])]), _vm._v(" "), _c('div', {
-    staticClass: "panel panel-default"
+    staticClass: "panel panel-default possessions"
   }, [_c('div', {
     staticClass: "panel-body"
   }, [_c('ul', {
-    staticClass: "list-unstyled possessions"
+    staticClass: "list-unstyled"
   }, _vm._l((_vm.possessions), function(item, index) {
     return _c('li', [_c('div', {
       staticClass: "row"
     }, [_c('div', {
       staticClass: "col-md-12"
-    }, [_c('h4', [_vm._v(_vm._s(item.title))]), _vm._v(" "), _c('p', [_c('small', [_vm._v(_vm._s(item.description))])])]), _vm._v(" "), _vm._m(2, true), _vm._v(" "), _c('div', {
+    }, [_c('h4', [_vm._v(_vm._s(item.title))]), _vm._v(" "), _c('p', [_c('small', [_vm._v(_vm._s(item.description))])])]), _vm._v(" "), _vm._m(0, true), _vm._v(" "), _c('div', {
       staticClass: "col-md-2 text-right"
     }, [_c('p', {
       staticClass: "text-muted"
@@ -1761,7 +1833,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "col-md-4 shared"
     }, [_c('ul', {
       staticClass: "list-inline shared text-right"
-    }, [_vm._m(3, true), _vm._v(" "), _vm._l((item.share), function(share, index) {
+    }, [_vm._m(1, true), _vm._v(" "), _vm._l((item.share), function(share, index) {
       return (index < 3) ? _c('li', [_c('img', {
         attrs: {
           "src": share.avatar,
@@ -1862,42 +1934,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }))])])])])], 2)])])])
   }))])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "col-md-6 tags"
-  }, [_c('a', {
-    staticClass: "btn btn-link btn-sm",
-    attrs: {
-      "href": "#"
-    }
-  }, [_c('i', {
-    staticClass: "fa fa-lg fa-fw fa-tag",
-    attrs: {
-      "aria-hidden": "true"
-    }
-  }), _vm._v(" Tag\n                                ")]), _vm._v(" "), _c('a', {
-    staticClass: "btn btn-link btn-sm",
-    attrs: {
-      "href": "#"
-    }
-  }, [_c('i', {
-    staticClass: "fa fa-lg fa-fw fa-paperclip",
-    attrs: {
-      "aria-hidden": "true"
-    }
-  }), _vm._v(" Attach\n                                ")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('a', {
-    staticClass: "btn btn-link btn-sm",
-    attrs: {
-      "href": "#"
-    }
-  }, [_c('i', {
-    staticClass: "fa fa-lg fa-fw fa-share-alt",
-    attrs: {
-      "aria-hidden": "true"
-    }
-  }), _vm._v(" Share\n                                ")])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "col-md-10 attach"
   }, [_c('ul', {

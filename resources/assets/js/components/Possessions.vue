@@ -15,29 +15,38 @@
                                 </div>
                                 <!-- Tags -->
                                 <div class="col-md-6 tags">
-                                    <a href="#" class="btn btn-link btn-sm">
-                                        <i class="fa fa-lg fa-fw fa-tag" aria-hidden="true"></i> Tag
+                                    <!-- Favorite Button -->
+                                    <a href="" class="text-warning" @click.prevent="form.favorite = !form.favorite">
+                                        <i class="fa fa-star fa-lg" aria-hidden="true" v-if="form.favorite"></i>
+                                        <i class="fa fa-star-o fa-lg" aria-hidden="true" v-else></i>
                                     </a>
-                                    <a href="#" class="btn btn-link btn-sm">
-                                        <i class="fa fa-lg fa-fw fa-paperclip" aria-hidden="true"></i> Attach
+                                    <!-- Attach Button -->
+                                    <a href="" class="btn btn-link" @click.prevent="comingSoon">
+                                        <i class="fa fa-paperclip fa-fw" aria-hidden="true"></i>
+                                        Attach
                                     </a>
+                                    <!-- AddTag Button -->
+                                    <button class="btn btn-default btn-xs"
+                                            @click="comingSoon">
+                                        <i class="fa fa-tag fa-fw"></i> Add Tag
+                                    </button>
                                 </div>
                                 <!-- Shared -->
                                 <div class="col-md-6 shared text-right">
-                                    <a href="#" class="btn btn-link btn-sm">
-                                        <i class="fa fa-lg fa-fw fa-share-alt" aria-hidden="true"></i> Share
+                                    <a href="" class="btn btn-link" @click.prevent="comingSoon">
+                                        <i class="fa fa-share-alt fa-fw" aria-hidden="true"></i> Share
                                     </a>
                                     <button type="button" class="btn btn-sm btn-default" data-toggle="collapse" data-target="#collapse">Cancel</button>
-                                    <button type="button" class="btn btn-sm btn-success" v-on:click="createItem">Create</button>
+                                    <button type="button" class="btn btn-sm btn-success" @:click="createItem">Create</button>
                                 </div>
                             </div>
                         </div>
                     </div>
         </div>
         <!-- List -->
-        <div class="panel panel-default">
+        <div class="panel panel-default possessions">
             <div class="panel-body">
-                <ul class="list-unstyled possessions">
+                <ul class="list-unstyled">
                     <li v-for="(item, index) in possessions">
                         <div class="row">
                             <div class="col-md-12">
@@ -174,7 +183,8 @@ export default {
             possessions: [],
             form: {
                 title: '',
-                description: ''
+                description: '',
+                favorite: false
             },
             newTag: {
                 data: {
@@ -329,64 +339,76 @@ export default {
     transition: none;
 }
 
-.panel-body {
-    padding: 0;
-}
+.possessions {
 
-ul.possessions {
+    .panel-body{
+        padding: 0 !important;
 
-    > li {
-        padding: 20px 20px 30px;
+        ul.list-unstyled {
 
-        &:nth-child(even) {
-            background: #f3f3f3;
-        }
+            > li {
+                padding: 20px 20px 30px;
 
-        .btn-round {
-            border-radius: 50%;
-        }
-        .border-dashed {
-            border-style: dashed;
-        }
-    }
-    h4 {
-        margin-bottom: 4px;
-    }
-    .tags {
-        .label {
-            font-size: 13px;
-            margin-right: 3px;
-            font-weight: normal;
-        }
-    }
-    .shared {
-        li {
-            padding-left: 1px;
-            padding-right: 1px;
-            img {
-                border-radius: 50%;
-                height: 35px;
-                width: 35px;
-            }
-            .dropdown-menu {
-                padding: 10px;
+                &:nth-child(even) {
+                    background: #f3f3f3;
+                }
 
-                .list-group {
-                    margin: 10px 0;
+                h4 {
+                    margin-bottom: 4px;
+                }
+
+                .btn-round {
+                    border-radius: 50%;
+                }
+                .border-dashed {
+                    border-style: dashed;
+                }
+
+                .attach {
+                    padding-top:10px;
+                    padding-bottom: 20px;
+                    ul.list-inline {
+                        margin-left: 0;
+                        li {
+                            padding-left: 1px;
+                            padding-right: 1px;
+                            img {
+                                height: 45px;
+                                width: 45px;
+                            }
+                        }
+                    }
+
+                }
+
+                .tags {
+                    .label {
+                        font-size: 13px;
+                        margin-right: 3px;
+                        font-weight: normal;
+                    }
+                }
+
+                .shared {
+                    li {
+                        padding-left: 1px;
+                        padding-right: 1px;
+                        img {
+                            border-radius: 50%;
+                            height: 35px;
+                            width: 35px;
+                        }
+                        .dropdown-menu {
+                            padding: 10px;
+
+                            .list-group {
+                                margin: 10px 0;
+                            }
+                        }
+                    }
                 }
             }
-        }
-    }
-    .attach {
-        margin-top:10px;
-        margin-bottom: 20px;
-        li {
-            padding-left: 1px;
-            padding-right: 1px;
-            img {
-                height: 45px;
-                width: 45px;
-            }
+
         }
     }
 
