@@ -406,7 +406,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this2.possessions.unshift(response.data);
                 _this2.form = {
                     title: '',
-                    description: ''
+                    description: '',
+                    favorite: false
                 };
                 $('#collapse').collapse('hide');
             });
@@ -1695,7 +1696,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "type": "button"
     },
     on: {
-      ":click": _vm.createItem
+      "click": _vm.createItem
     }
   }, [_vm._v("Create")])])])])])]), _vm._v(" "), _c('div', {
     staticClass: "panel panel-default possessions"
