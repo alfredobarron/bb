@@ -25,10 +25,6 @@ class CreateUsersTable extends Migration
             $table->string('last_name')->nullable();
             $table->date('birthday')->nullable();
             $table->string('avatar')->nullable();
-            $table->string('ine')->nullable();
-            $table->string('curp')->nullable();
-            $table->string('imss')->nullable();
-            $table->string('cedula')->nullable();
             $table->softDeletes();
         });
     }

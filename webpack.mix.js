@@ -12,5 +12,7 @@ const { mix } = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-   .extract(['lodash', 'jquery', 'bootstrap-sass', 'vue', 'axios', 'moment'])
+   //.extract(['lodash', 'jquery', 'bootstrap-sass', 'vue', 'axios', 'moment', 'sweetalert'])
    .sass('resources/assets/sass/app.scss', 'public/css');
+
+mix.browserSync('bb.dev');

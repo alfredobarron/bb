@@ -24,11 +24,13 @@ class PossessionController extends Controller
         $this->validate($request, [
             'title' => 'required|max:255',
             'description' => 'required',
+            'favorite' => 'boolean'
         ]);
 
         $poss = Possession::create([
             'title' => $request->title,
             'description' => $request->description,
+            'favorite' => $request->favorite,
             'user_id' => Auth::id()
         ]);
 
@@ -64,14 +66,32 @@ class PossessionController extends Controller
         return $tag;
     }
 
-    public function addShare(Request $request, $id, $userId)
+    public function removeTag($id,$tagId)
     {
         $poss = Possession::find($id);
+        $poss->tags()->detach($tagId);
+        return 'OK';
+    }
 
-        if (!$poss->share->contains($userId)) {
-            $poss->share()->attach($userId);
+    public function addShare(Request $request, $id)
+    {
+        $this->validate($request, [
+            'userId' => 'required'
+        ]);
+
+        $poss = Possession::find($id);
+
+        if (!$poss->share->contains($request->userId)) {
+            $poss->share()->attach($request->userId);
         }
 
+        return 'OK';
+    }
+
+    public function removeShare($id,$shareId)
+    {
+        $poss = Possession::find($id);
+        $poss->share()->detach($shareId);
         return 'OK';
     }
 

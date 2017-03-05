@@ -3,45 +3,45 @@
         <!-- Create collapse -->
         <div class="collapse possession-create" id="collapse">
             <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control input-lg" placeholder="Car, House, Account..." v-model="form.title">
-                                    </div>
-                                    <div class="form-group">
-                                        <textarea class="form-control" rows="3" placeholder="This possesions is..." v-model="form.description"></textarea>
-                                    </div>
-                                </div>
-                                <!-- Tags -->
-                                <div class="col-md-6 tags">
-                                    <!-- Favorite Button -->
-                                    <a href="" class="text-warning" @click.prevent="form.favorite = !form.favorite">
-                                        <i class="fa fa-star fa-lg" aria-hidden="true" v-if="form.favorite"></i>
-                                        <i class="fa fa-star-o fa-lg" aria-hidden="true" v-else></i>
-                                    </a>
-                                    <!-- Attach Button -->
-                                    <a href="" class="btn btn-link" @click.prevent="comingSoon">
-                                        <i class="fa fa-paperclip fa-fw" aria-hidden="true"></i>
-                                        Attach
-                                    </a>
-                                    <!-- AddTag Button -->
-                                    <button class="btn btn-default btn-xs"
-                                            @click="comingSoon">
-                                        <i class="fa fa-tag fa-fw"></i> Add Tag
-                                    </button>
-                                </div>
-                                <!-- Shared -->
-                                <div class="col-md-6 shared text-right">
-                                    <a href="" class="btn btn-link" @click.prevent="comingSoon">
-                                        <i class="fa fa-share-alt fa-fw" aria-hidden="true"></i> Share
-                                    </a>
-                                    <button type="button" class="btn btn-sm btn-default" data-toggle="collapse" data-target="#collapse">Cancel</button>
-                                    <button type="button" class="btn btn-sm btn-success" @click="createItem">Create</button>
-                                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" placeholder="Car, House, Account..." v-model="form.title">
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" rows="3" placeholder="This possesions is..." v-model="form.description"></textarea>
                             </div>
                         </div>
+                        <!-- Tags -->
+                        <div class="col-md-6 tags">
+                            <!-- Favorite Button -->
+                            <a href="" class="text-warning" @click.prevent="form.favorite = !form.favorite">
+                                <i class="fa fa-star fa-lg" aria-hidden="true" v-if="form.favorite"></i>
+                                <i class="fa fa-star-o fa-lg" aria-hidden="true" v-else></i>
+                            </a>
+                            <!-- Attach Button -->
+                            <a href="" class="btn btn-link" @click.prevent="comingSoon">
+                                <i class="fa fa-paperclip fa-fw" aria-hidden="true"></i>
+                                Attach
+                            </a>
+                            <!-- AddTag Button -->
+                            <button class="btn btn-default btn-xs"
+                                    @click="comingSoon">
+                                <i class="fa fa-tag fa-fw"></i> Add Tag
+                            </button>
+                        </div>
+                        <!-- Shared -->
+                        <div class="col-md-6 shared text-right">
+                            <a href="" class="btn btn-link" @click.prevent="comingSoon">
+                                <i class="fa fa-share-alt fa-fw" aria-hidden="true"></i> Share
+                            </a>
+                            <button type="button" class="btn btn-sm btn-default" data-toggle="collapse" data-target="#collapse">Cancel</button>
+                            <button type="button" class="btn btn-sm btn-success" @click="createItem">Create</button>
+                        </div>
                     </div>
+                </div>
+            </div>
         </div>
         <!-- List -->
         <div class="panel panel-default possessions">
@@ -103,23 +103,46 @@
                                 </span>
                                 <!-- List Tags -->
                                 <!-- <i class="fa fa-tag fa-lg text-muted" aria-hidden="true"></i> -->
-                                <span class="label label-primary" v-for="tag in item.tags">{{tag.title}}</span>
+                                <span class="label label-primary" v-for="(tag, index) in item.tags">
+                                    {{tag.title}}
+                                    <a href="" @click.prevent="removeTag(item, tag.id, index)">
+                                        <span class="fa-stack fa-stack-sm">
+                                          <i class="fa fa-circle fa-stack-2x"></i>
+                                          <i class="fa fa-times fa-stack-1x fa-inverse"></i>
+                                        </span>
+                                    </a>
+                                </span>
                             </div>
                             <!-- Shared -->
                             <div class="col-md-4 shared">
                                 <ul class="list-inline shared text-right">
-                                    <li>
-                                        <!-- <i class="fa fa-fw fa-share-alt" aria-hidden="true"></i> -->
+                                    <li v-if="item.share.length==0">
+                                        <i class="fa fa-share-alt fa-fw" aria-hidden="true"></i>
                                         <small>Share</small>
                                     </li>
                                     <!-- List Users shared -->
                                     <li v-for="(share, index) in item.share" v-if="index<3">
-                                        <img :src="share.avatar" alt="">
+                                        <div class="thumb">
+                                            <img :src="share.avatar" alt="">
+                                            <a href="" @click.prevent="removeShare(item, share.id, index)">
+                                                <span class="fa-stack fa-stack-sm">
+                                                  <i class="fa fa-circle fa-stack-2x"></i>
+                                                  <i class="fa fa-times fa-stack-1x fa-inverse"></i>
+                                                </span>
+                                            </a>
+                                            <div class="panel panel-default popover2">
+                                                <div class="panel-body">
+                                                    <strong>{{share.name}}</strong><br>
+                                                    <small>{{share.email}}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- </popover> -->
                                     </li>
                                     <!-- Count Users-->
                                     <li v-if="item.share.length>3">
                                         <a href="" class="btn btn-default btn-round border-dashed"
-                                           @click.prevent="comingSoon">
+                                           @click.prevent="viewCompleteListShare(item)">
                                             +{{item.share.length - 3}}
                                         </a>
                                     </li>
@@ -139,7 +162,7 @@
                                                 <li>
                                                     <input type="text" class="form-control"
                                                            placeholder="Search"
-                                                           v-focus.lazy="true"
+                                                           v-focus="true"
                                                            v-model="searchUser">
                                                 </li>
                                                 <li>
@@ -169,6 +192,37 @@
                 </ul>
             </div>
         </div>
+
+        <!-- List Share modal-->
+        <div class="modal fade modal-share" role="dialog" id="modalShare">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Share</h4>
+              </div>
+              <div class="modal-body">
+                <ul class="media-list">
+                    <li class="media" v-for="(user, index) in possession.share">
+                        <div class="media-left">
+                            <img class="media-object" :src="user.avatar" alt="">
+                        </div>
+                        <div class="media-body">
+                            <button type="button" class="close" aria-label="Close"
+                                    @click="removeShare(possession, user.id, index)">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <strong>{{user.name}}</strong><br>
+                            <small>{{user.email}}</small>
+                        </div>
+                    </li>
+                </ul>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
     </div>
 </template>
 
@@ -181,6 +235,7 @@ export default {
     data() {
         return {
             possessions: [],
+            possession: {},
             form: {
                 title: '',
                 description: '',
@@ -206,7 +261,7 @@ export default {
     },
 
     directives: {
-        'focus': function (el, value) {
+        focus: function (el, value) {
             if (value) {
                 setTimeout(function(){el.focus();},0);
             }
@@ -225,7 +280,7 @@ export default {
 
     methods: {
         createItem: function () {
-            axios.post('/possession', this.form).then(response => {
+            axios.post('/possession/store', this.form).then(response => {
                 this.possessions.unshift(response.data);
                 this.form = {
                     title: '',
@@ -290,6 +345,12 @@ export default {
                 this.newTag.options.show = possession;
             }
         },
+        removeTag: function (possession, tagId, index) {
+            axios.delete('/possession/removeTag/'+ possession.id +'/'+ tagId)
+            .then(response => {
+                possession.tags.splice(index, 1);
+            });
+        },
         cancelAddTag: function () {
             this.newTag = {
                 data: {
@@ -304,7 +365,7 @@ export default {
         addShare: function (possession, user) {
 
             if (possession && user) {
-                axios.get('/possession/addShare/' + possession.id +'/'+ user.id)
+                axios.post('/possession/addShare/' + possession.id, {userId: user.id})
                 .then(response => {
                     possession.share.push(user);
                     this.searchUser = '',
@@ -315,6 +376,17 @@ export default {
                 this.users = []
             }
 
+        },
+        removeShare: function (possession, shareId, index) {
+            axios.delete('/possession/removeShare/'+ possession.id +'/'+ shareId)
+            .then(response => {
+                possession.share.splice(index, 1);
+            });
+        },
+
+        viewCompleteListShare: function (possession) {
+            this.possession = possession;
+            $('#modalShare').modal('show');
         },
 
         fetchUsers: function () {
@@ -342,7 +414,7 @@ export default {
 
 .possessions {
 
-    .panel-body{
+    > .panel-body {
         padding: 0 !important;
 
         ul.list-unstyled {
@@ -354,7 +426,7 @@ export default {
                     background: #f3f3f3;
                 }
 
-                h4 {
+                > h4 {
                     margin-bottom: 4px;
                 }
 
@@ -363,6 +435,9 @@ export default {
                 }
                 .border-dashed {
                     border-style: dashed;
+                }
+                .fa-stack-sm {
+                    font-size: .7em;
                 }
 
                 .attach {
@@ -387,6 +462,11 @@ export default {
                         font-size: 13px;
                         margin-right: 3px;
                         font-weight: normal;
+
+                        // a {
+                        //     color: #fff;
+                        //     opacity: 0.6;
+                        // }
                     }
                 }
 
@@ -394,11 +474,44 @@ export default {
                     li {
                         padding-left: 1px;
                         padding-right: 1px;
-                        img {
-                            border-radius: 50%;
-                            height: 35px;
-                            width: 35px;
+
+                        div.thumb {
+                            position: relative;
+                            cursor: pointer;
+                            &:hover a,
+                            &:hover .popover2 {
+                                visibility: visible;
+                                opacity: 1;
+                            }
+                            &:hover img {
+                                border: 2px solid #3097D1;
+                            }
+                            img {
+                                border-radius: 50%;
+                                height: 38px;
+                                width: 38px;
+                                border: 2px solid transparent;
+                            }
+                            a {
+                                position: absolute;
+                                top: -7px;
+                                right: -3px;
+                                visibility: hidden;
+                                opacity: 0;
+                                transition: opacity .5s;
+                            }
+                            .popover2 {
+                                position: absolute;
+                                z-index: 1000;
+                                top: 40px;
+                                right: 0;
+                                visibility: hidden;
+                                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+                                opacity: 0;
+                                transition: opacity .5s;
+                            }
                         }
+
                         .dropdown-menu {
                             padding: 10px;
 
@@ -408,11 +521,22 @@ export default {
                         }
                     }
                 }
+
             }
 
         }
     }
 
+}
+
+.modal-share {
+    .media {
+        padding: 10px;
+        margin: 0;
+        &:nth-child(even) {
+            background: #f3f3f3;
+        }
+    }
 }
 
 </style>

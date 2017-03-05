@@ -24,14 +24,19 @@ Route::group(['middleware' => ['web', 'auth']], function () {
 
     // Possession
     Route::get('/possession/byUser', 'PossessionController@byUser');
-    Route::post('/possession', 'PossessionController@store');
+    Route::post('/possession/store', 'PossessionController@store');
     Route::delete('/possession/{id}', 'PossessionController@destroy');
 
-    Route::post('/possession/addTag/{id}', 'PossessionController@addTag');
-    Route::get('/possession/addShare/{id}/{userId}', 'PossessionController@addShare');
-
+    // Favorite
     Route::post('/possession/favorite/{id}', 'PossessionController@favorite');
 
+    // Tag
+    Route::post('/possession/addTag/{id}', 'PossessionController@addTag');
+    Route::delete('/possession/removeTag/{id}/{tagId}', 'PossessionController@removeTag');
+
+    // Share
+    Route::post('/possession/addShare/{id}', 'PossessionController@addShare');
+    Route::delete('/possession/removeShare/{id}/{shareId}', 'PossessionController@removeShare');
 
     // User
     Route::get('/user/byNameOrEmail/{name}', 'UserController@byNameOrEmail');
