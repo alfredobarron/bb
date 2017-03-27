@@ -25,6 +25,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     // Possession
     Route::get('/possession/byUser', 'PossessionController@byUser');
     Route::post('/possession/store', 'PossessionController@store');
+    Route::put('/possession/update/{id}', 'PossessionController@update');
     Route::delete('/possession/{id}', 'PossessionController@destroy');
 
     // Favorite

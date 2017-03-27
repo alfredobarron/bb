@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Possession;
+use App\PossessionShare;
 use App\Tag;
 
 class PossessionController extends Controller
@@ -16,7 +17,12 @@ class PossessionController extends Controller
 
     public function byUser()
     {
-        return Possession::with('tags', 'share')->where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
+        $possShare = PossessionShare::where('user_id', Auth::id())->get();
+        $possShare->implode('possession_id', ', ');
+        return Possession::with('tags', 'share', 'user')
+        ->where('user_id', Auth::id())
+        ->OrwhereIn('id', $possShare)
+        ->orderBy('created_at', 'desc')->get();
     }
 
     public function store(Request $request)
@@ -34,12 +40,52 @@ class PossessionController extends Controller
             'user_id' => Auth::id()
         ]);
 
+        if (count($request->tags)) {
+
+            $collection = collect($request->tags);
+            $unique = $collection->unique();
+            $unique->values()->all();
+
+            foreach ($unique as $key => $value) {
+                $tag = Tag::firstOrCreate([
+                    'title' => $value
+                ]);
+
+                if (!$poss->tags->contains($tag->id)) {
+                    $poss->tags()->attach($tag->id);
+                }
+            }
+        }
+
+        if (count($request->share)) {
+
+            $collection = collect($request->share);
+            $unique = $collection->unique();
+            $unique->values()->all();
+
+            foreach ($unique as $key => $value) {
+                if (!$poss->share->contains($value['id'])) {
+                    $poss->share()->attach($value['id']);
+                }
+            }
+        }
+
         return Possession::with('tags', 'share')->find($poss->id);
     }
 
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'title' => 'required|max:255',
+            'description' => 'required'
+        ]);
 
+        $poss = Possession::find($id);
+        $poss->title = $request->title;
+        $poss->description = $request->description;
+        $poss->save();
+
+        return $poss;
     }
 
     public function destroy($id)
