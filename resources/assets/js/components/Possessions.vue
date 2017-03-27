@@ -1,5 +1,6 @@
 <template>
     <div class="container possessions">
+        <!-- Nav & Search-->
         <div class="row">
             <!-- Nav -->
             <div class="col-md-8">
