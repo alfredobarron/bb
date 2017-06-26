@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Storage;
 
 class User extends Authenticatable
 {
@@ -36,8 +37,23 @@ class User extends Authenticatable
         'connections' => 'array'
     ];
 
+    protected $appends = ['avatar_url'];
+
     public function possessions()
     {
       return $this->hasMany(Possession::class);
+    }
+
+    public function getAvatarUrlAttribute()
+    {
+        if (substr( $this->avatar, 0, 7 ) === "http://" || substr( $this->avatar, 0, 8 ) === "https://")
+            return $this->avatar;
+
+        return Storage::url('avatars/'. $this->id .'/'. $this->avatar);
+    }
+
+    public function emailChange()
+    {
+      return $this->hasOne(EmailChange::class);
     }
 }

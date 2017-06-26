@@ -40,7 +40,7 @@
                              My Possessions
                         </a>
                     @else
-                        <a class="navbar-brand" href="{{ url('/home') }}">
+                        <a class="navbar-brand" href="{{ url('/possessions') }}">
                             <i class="fa fa-bookmark-o text-success" aria-hidden="true"></i>
                              My Possessions
                         </a>
@@ -64,11 +64,13 @@
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    <img src="{{Auth::user()->avatar}}" alt="">
+                                    <img src="{{Auth::user()->avatar_url}}" alt="">
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
+                                    <li><a href="/profile">Profile</a></li>
+                                    <li role="separator" class="divider"></li>
                                     <li>
                                         <a href="{{ url('/logout') }}"
                                             onclick="event.preventDefault();
@@ -87,10 +89,10 @@
                     </ul>
 
                     @if (!Auth::guest())
-                        <a href="#" class="btn btn-default btn-sm navbar-btn navbar-right"
+                        <!-- <a href="#" class="btn btn-default btn-sm navbar-btn navbar-right"
                            data-toggle="collapse" data-target="#collapse" aria-expanded="false">
                             <span class="glyphicon glyphicon-plus text-success"></span>
-                        </a>
+                        </a> -->
                     @endif
                 </div>
             </div>

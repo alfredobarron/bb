@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Storage;
+
 use App\Possession;
+use App\PossessionFile;
 use App\PossessionShare;
 use App\Tag;
+
+use App\Http\Controllers\PossessionFileController;
 
 class PossessionController extends Controller
 {
@@ -15,33 +20,66 @@ class PossessionController extends Controller
         return view('possessions');
     }
 
-    public function byUser()
+    public function viewPossession(Request $request, $possessionId)
     {
-        $possShare = PossessionShare::where('user_id', Auth::id())->get();
-        $possShare->implode('possession_id', ', ');
-        return Possession::with('tags', 'share', 'user')
-        ->where('user_id', Auth::id())
-        ->OrwhereIn('id', $possShare)
-        ->orderBy('created_at', 'desc')->get();
+        $possession = Possession::with('files', 'tags', 'share')->find($possessionId);
+
+        return view('possession', ['possession' => $possession]);
+    }
+
+    public function byUser(Request $request, $parentId = null)
+    {
+        // $possShare = PossessionShare::where('user_id', Auth::id())->get();
+        // $possShare->implode('possession_id', ', ');
+        //
+        // return Possession::with('tags', 'share', 'user')
+        // ->where('user_id', Auth::id())
+        // ->OrwhereIn('id', $possShare)
+        // ->orderBy('created_at', 'desc')->get();
+
+        $query = Possession::with('files', 'tags', 'share', 'user')
+        ->orderBy('type', 'desc')
+        ->where('user_id', Auth::id());
+
+        if ($parentId) {
+            $query->where('parent_id', $parentId);
+        } else {
+            $query->where('parent_id', 0);
+        }
+
+        return $query->get();
     }
 
     public function store(Request $request)
     {
         $this->validate($request, [
             'title' => 'required|max:255',
-            'description' => 'required',
-            'favorite' => 'boolean'
+            // 'description' => 'required',
+            // 'favorite' => 'boolean'
         ]);
 
         $poss = Possession::create([
             'title' => $request->title,
-            'description' => $request->description,
-            'favorite' => $request->favorite,
-            'user_id' => Auth::id()
+            // 'description' => $request->description,
+            // 'favorite' => $request->favorite,
+            'user_id' => Auth::id(),
+            'parent_id' => $request->parent_id,
+            'type' => $request->type
         ]);
 
-        if (count($request->tags)) {
+        if (count($request['files'])) {
+            foreach ($request['files'] as $key => $value) {
+                $fileCtrl = new PossessionFileController();
+                $fileCtrl->moveFromTemp($value['pathFile'], $poss->id);
+                PossessionFile::create([
+                    'basename' => $value['infoFile']['basename'],
+                    'extension' => $value['infoFile']['extension'],
+                    'possession_id' => $poss->id
+                ]);
+            }
+        }
 
+        if (count($request->tags)) {
             $collection = collect($request->tags);
             $unique = $collection->unique();
             $unique->values()->all();
@@ -58,7 +96,6 @@ class PossessionController extends Controller
         }
 
         if (count($request->share)) {
-
             $collection = collect($request->share);
             $unique = $collection->unique();
             $unique->values()->all();
@@ -70,7 +107,7 @@ class PossessionController extends Controller
             }
         }
 
-        return Possession::with('tags', 'share')->find($poss->id);
+        return Possession::with('files', 'tags', 'share')->find($poss->id);
     }
 
     public function update(Request $request, $id)

@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-  <possessions></possessions>
+    <profile :user-auth="{{ $user }}"></profile>
 @endsection

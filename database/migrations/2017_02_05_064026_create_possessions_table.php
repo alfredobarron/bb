@@ -16,10 +16,22 @@ class CreatePossessionsTable extends Migration
         Schema::create('possessions', function (Blueprint $table) {
             $table->increments('id');
             $table->text('title');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->boolean('favorite')->default(false);
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('parent_id')->default(0);
+            $table->integer('type')->default(1); // 1.Possession, 2.Category
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        Schema::create('possession_files', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('basename');
+            $table->string('extension');
+            $table->integer('possession_id')->unsigned();
+            $table->foreign('possession_id')->references('id')->on('possessions');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -27,17 +39,6 @@ class CreatePossessionsTable extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title')->unique();
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
-        Schema::create('possession_files', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('title');
-            $table->text('description');
-            $table->string('file');
-            $table->integer('possession_id')->unsigned();
-            $table->foreign('possession_id')->references('id')->on('possessions');
             $table->timestamps();
             $table->softDeletes();
         });

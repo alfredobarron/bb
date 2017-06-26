@@ -27,7 +27,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/possessions';
 
     /**
      * Create a new controller instance.
@@ -62,7 +62,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $grav_url = "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $data['email'] ) ) ) . "?d=retro&s=40";
+        $grav_url = "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $data['email'] ) ) ) . "?d=retro";
 
         return User::create([
             'name' => $data['name'],

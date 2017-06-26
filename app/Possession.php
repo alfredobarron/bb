@@ -11,21 +11,26 @@ class Possession extends Model
 
     protected $dates = ['deleted_at'];
 
-    protected $fillable = ['title', 'description', 'favorite', 'user_id'];
+    protected $fillable = ['title', 'description', 'favorite', 'user_id', 'parent_id', 'type'];
 
     public function user()
     {
-      return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
+    }
+
+    public function files()
+    {
+        return $this->hasMany(PossessionFile::class);
     }
 
     public function tags()
     {
-      return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(Tag::class);
     }
 
     public function share()
     {
-      return $this->belongsToMany(User::class, 'possession_share');
+        return $this->belongsToMany(User::class, 'possession_share');
     }
 
 }

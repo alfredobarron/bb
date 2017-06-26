@@ -19,10 +19,8 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
-        'remember_token' => str_random(10),
-        'first_name' => $faker->firstName,
-        'last_name' => $faker->lastName,
-        'birthday' => $faker->date($format = 'Y-m-d', $max = '1990-06-09'),
-        'avatar' => $faker->imageUrl(45, 45, 'people', true, $faker->numberBetween($min = 1, $max = 10))
+        //'remember_token' => str_random(10),
+        //'avatar' => $faker->imageUrl(45, 45, 'people', true, $faker->numberBetween($min = 1, $max = 10))
+        'avatar' => "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $faker->unique()->safeEmail ) ) ) . "?d=retro"
     ];
 });
