@@ -1,48 +1,32 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <div class="dropdown">
-                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <span class="glyphicon glyphicon-plus text-success"></span> New
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#myModalPossession">
-                                <i class="fa-fw fa fa-bookmark" aria-hidden="true"></i> Possession
-                            </a>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#myModalCategory">
-                                <i class="fa-fw fa fa-folder" aria-hidden="true"></i> Category
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+            <div class="col-md-6">
+                <p class="lead" v-if="parent.title"><a href="/possessions"><i class="fa fa-arrow-left" aria-hidden="true"></i></a> {{parent.title}}</p>
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="#" class="btn btn-default" data-toggle="modal" data-target="#myModalPossession">
+                    <span class="glyphicon glyphicon-plus text-success"></span> Possession
+                </a>
+                <a href="#" class="btn btn-default" data-toggle="modal" data-target="#myModalCategory">
+                    <i class="fa-fw fa fa-folder" aria-hidden="true"></i> New category
+                </a>
             </div>
         </div>
-        <br>
+        <hr>
         <!-- List -->
         <div class="row">
             <div class="col-sm-3" v-for="(possession, index) in possessions">
-                <div class="panel panel-default" v-if="possession.type == 2">
-                    <div class="panel-body" @dblclick="goToCategory(possession.id)">
+                <div class="panel panel-default" v-if="possession.type == 2" @click="goToCategory(possession.id)">
+                    <div class="panel-body">
                         <span class="fa-stack fa-lg">
                             <i class="fa fa-circle fa-stack-2x"></i>
                             <i class="fa fa-folder fa-stack-1x fa-inverse"></i>
                         </span>
                         {{possession.title}}
-                        <!-- <br><br>
-                        <p class="text-right"><a href="#" class="btn btn-default" role="button">Edit</a></p> -->
-                        <p class="text-right">
-                            <a href="#" @click="goToCategory(possession.id)">
-                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                            </a>
-                        </p>
                     </div>
                 </div>
-                <div class="panel panel-default" v-else @dblclick="goToPossession(possession.id)">
+                <div class="panel panel-default" v-else @click="goToPossession(possession.id)">
                     <swiper :options="swiperOption" v-show="possession.files">
                         <swiper-slide v-for="file in possession.files">
                             <img :src="file.urlThumb" class="img-responsive">
@@ -51,13 +35,6 @@
                     </swiper>
                     <div class="panel-body">
                         <p>{{possession.title}}</p>
-                        <p class="text-right">
-                            <a href="#" @click="goToPossession(possession.id)">
-                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                            </a>
-                        </p>
-                        <!-- <p>...</p>
-                        <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p> -->
                     </div>
                 </div>
             </div>
@@ -121,6 +98,7 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper';
 export default {
     data() {
         return {
+            parent: {},
             possessions: [],
             newPossession: {
                 title: null,
@@ -161,7 +139,6 @@ export default {
         var res = str.split("/");
 
         if (res.length == 3) {
-
             var currentCategoryId = parseInt(res[2]);
 
             this.newPossession.parent_id = currentCategoryId;
@@ -169,12 +146,13 @@ export default {
 
             axios.get('/possession/byUser/' + currentCategoryId)
             .then(response => {
-                this.possessions = response.data;
+                this.possessions = response.data.possessions;
+                this.parent = response.data.parent;
             });
         } else {
             axios.get('/possession/byUser')
             .then(response => {
-                this.possessions = response.data;
+                this.possessions = response.data.possessions;
             });
         }
     },

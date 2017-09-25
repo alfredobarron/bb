@@ -22,12 +22,12 @@ class PossessionController extends Controller
 
     public function viewPossession(Request $request, $possessionId)
     {
-        $possession = Possession::with('files', 'tags', 'share')->find($possessionId);
+        $possession = Possession::with('files', 'tags', 'share', 'parent')->find($possessionId);
 
         return view('possession', ['possession' => $possession]);
     }
 
-    public function byUser(Request $request, $parentId = null)
+    public function byUser(Request $request, $parentId = 0)
     {
         // $possShare = PossessionShare::where('user_id', Auth::id())->get();
         // $possShare->implode('possession_id', ', ');
@@ -41,13 +41,17 @@ class PossessionController extends Controller
         ->orderBy('type', 'desc')
         ->where('user_id', Auth::id());
 
-        if ($parentId) {
+        // if ($parentId) {
             $query->where('parent_id', $parentId);
-        } else {
-            $query->where('parent_id', 0);
-        }
+        // } else {
+        //     $query->where('parent_id', 0);
+        // }
 
-        return $query->get();
+        $possessions = $query->get();
+
+        $parent = Possession::find($parentId);
+
+        return ['possessions' => $possessions, 'parent' => $parent];
     }
 
     public function store(Request $request)

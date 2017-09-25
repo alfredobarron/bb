@@ -18,6 +18,11 @@ class Possession extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function parent()
+    {
+        return $this->belongsTo(Possession::class,'parent_id');
+    }
+
     public function files()
     {
         return $this->hasMany(PossessionFile::class);

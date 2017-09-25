@@ -1,6 +1,16 @@
 <template>
     <div class="container">
-        <h1>{{possession.title}}</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <p class="lead">
+                    <a :href="'/possessions/'+possession.parent.id">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                    </a>
+                    {{possession.parent.title}} / {{possession.title}}
+                </p>
+            </div>
+        </div>
+        <hr>
         <div class="row">
             <div class="col-sm-3" v-show="possession.files" v-for="file in possession.files">
                 <a :href="file.url" class="thumbnail">
@@ -12,22 +22,7 @@
 </template>
 
 <script>
-
-import LightGallery from 'lightgallery'
-
 export default {
-    props: ['possession'],
-    components: {
-        LightGallery
-    },
-    mounted() {
-        $("#lightgallery").lightGallery();
-    }
+    props: ['possession']
 }
-
 </script>
-
-<style lang="scss">
-
-
-</style>

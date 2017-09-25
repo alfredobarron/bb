@@ -93,6 +93,13 @@ html, body, #app {
 .btn-link {
   text-decoration: none !important;
 }
+
+.lead {
+    margin-bottom: 0;
+    .fa {
+        margin-right: 20px;
+    }
+}
 // .navbar-brand-centered {
 //     position: absolute;
 //     left: 50%;
