@@ -22,7 +22,7 @@ class PossessionController extends Controller
 
     public function viewPossession(Request $request, $possessionId)
     {
-        $possession = Possession::with('files', 'tags', 'share', 'parent')->find($possessionId);
+        $possession = Possession::with('folders', 'files', 'comments', 'tags', 'share', 'parent')->find($possessionId);
 
         return view('possession', ['possession' => $possession]);
     }
@@ -58,13 +58,13 @@ class PossessionController extends Controller
     {
         $this->validate($request, [
             'title' => 'required|max:255',
-            // 'description' => 'required',
+            'description' => 'nullable|string',
             // 'favorite' => 'boolean'
         ]);
 
         $poss = Possession::create([
             'title' => $request->title,
-            // 'description' => $request->description,
+            'description' => $request->description,
             // 'favorite' => $request->favorite,
             'user_id' => Auth::id(),
             'parent_id' => $request->parent_id,

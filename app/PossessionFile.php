@@ -12,12 +12,17 @@ class PossessionFile extends Model
 
     protected $dates = ['deleted_at'];
     protected $table = 'possession_files';
-    protected $fillable = ['basename', 'extension', 'possession_id'];
-    protected $appends = ['url', 'urlThumb'];
+    protected $fillable = ['basename', 'name', 'extension', 'possession_id', 'folder_id'];
+    protected $appends = ['url', 'urlThumb', 'is_image'];
 
     public function possession()
     {
         return $this->belongsToMany(Possession::class);
+    }
+
+    public function folder()
+    {
+        return $this->belongsToMany(PossessionFolder::class);
     }
 
     public function getUrlAttribute()
@@ -28,5 +33,13 @@ class PossessionFile extends Model
     public function getUrlThumbAttribute()
     {
         return Storage::url('files/'.$this->possession_id.'/thumb_'.$this->basename);
+    }
+
+    public function getIsImageAttribute()
+    {
+        if (in_array($this->extension, ['jpg', 'jpeg', 'png'])) {
+            return true;
+        }
+        return false;
     }
 }

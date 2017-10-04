@@ -53,6 +53,9 @@
                         <div class="form-group">
                             <input type="text" class="form-control" placeholder="Car" v-model="newPossession.title">
                         </div>
+                        <div class="form-group">
+                            <textarea class="form-control" rows="3" placeholder="Description" v-model="newPossession.description"></textarea>
+                        </div>
                         <dropzone id="myVueDropzone" :use-font-awesome=true
                             :use-custom-dropzone-options=true :dropzoneOptions="dzOptions"
                             url="/possession/file/upload/temp" v-on:vdropzone-success="showSuccess">
@@ -76,6 +79,9 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <input type="text" class="form-control" placeholder="Cars" v-model="newCategory.title">
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" rows="3" placeholder="Description" v-model="newCategory.description"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -102,12 +108,14 @@ export default {
             possessions: [],
             newPossession: {
                 title: null,
+                description: null,
                 parent_id: 0,
                 type: 1,
                 files: []
             },
             newCategory: {
                 title: null,
+                description: null,
                 parent_id: 0,
                 type: 2
             },
@@ -163,6 +171,7 @@ export default {
             .then(response => {
                 this.possessions.push(response.data);
                 this.newPossession.title = null;
+                this.newPossession.description = null;
                 this.newPossession.files = [];
                 $('#myModalPossession').modal('hide');
             });
@@ -172,6 +181,7 @@ export default {
             .then(response => {
                 this.possessions.unshift(response.data);
                 this.newCategory.title = null;
+                this.newCategory.description = null;
                 $('#myModalCategory').modal('hide');
             });
         },

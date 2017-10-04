@@ -11,6 +11,30 @@ use App\PossessionFile;
 
 class PossessionFileController extends Controller
 {
+    public function upload(Request $request, $id)
+    {
+        $pathFile = $request->file->store('files/'.$id, 'public');
+
+        $infoFile = pathinfo($pathFile);
+
+        info($request);
+
+        info($pathFile);
+        info($infoFile);
+
+        if (in_array(strtolower($infoFile['extension']), ['jpg', 'jpeg', 'png']) ) {
+            $this->resize($request->file, $id, $infoFile);
+            $this->createThumb($request->file, $id, $infoFile);
+        }
+
+        return PossessionFile::create([
+            'basename' => $infoFile['basename'],
+            'name' => $request->file->getClientOriginalName(),
+            'extension' => $infoFile['extension'],
+            'possession_id' => $id
+        ]);
+    }
+
     public function uploadTemp(Request $request)
     {
         $pathFile = $request->file->store('files/temp/'.Auth::id(), 'public');

@@ -23,9 +23,19 @@ class Possession extends Model
         return $this->belongsTo(Possession::class,'parent_id');
     }
 
+    public function folders()
+    {
+        return $this->hasMany(PossessionFolder::class);
+    }
+
     public function files()
     {
         return $this->hasMany(PossessionFile::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(PossessionComment::class);
     }
 
     public function tags()

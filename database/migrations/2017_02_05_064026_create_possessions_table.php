@@ -26,10 +26,32 @@ class CreatePossessionsTable extends Migration
             $table->softDeletes();
         });
 
+        Schema::create('possession_folders', function (Blueprint $table) {
+            $table->increments('id');
+            $table->text('title');
+            $table->text('description')->nullable();
+            $table->integer('possession_id')->unsigned();
+            $table->foreign('possession_id')->references('id')->on('possessions');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
         Schema::create('possession_files', function (Blueprint $table) {
             $table->increments('id');
             $table->string('basename');
+            $table->string('name');
             $table->string('extension');
+            $table->integer('possession_id')->unsigned();
+            $table->foreign('possession_id')->references('id')->on('possessions');
+            $table->integer('folder_id')->unsigned()->nullable();
+            $table->foreign('folder_id')->references('id')->on('possession_folders');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        Schema::create('possession_comments', function (Blueprint $table) {
+            $table->increments('id');
+            $table->text('comment');
             $table->integer('possession_id')->unsigned();
             $table->foreign('possession_id')->references('id')->on('possessions');
             $table->timestamps();
@@ -65,7 +87,9 @@ class CreatePossessionsTable extends Migration
     {
         Schema::dropIfExists('possession_tag');
         Schema::dropIfExists('possession_share');
+        Schema::dropIfExists('possession_comments');
         Schema::dropIfExists('possession_files');
+        Schema::dropIfExists('possession_folders');
         Schema::dropIfExists('tags');
         Schema::dropIfExists('possessions');
     }

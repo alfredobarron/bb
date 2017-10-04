@@ -35,8 +35,15 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::delete('/possession/delete/{id}', 'PossessionController@destroy');
     Route::get('/possession/{possessionId}', 'PossessionController@viewPossession');
 
+    // Folders
+    Route::post('/possession/folder/store', 'PossessionFolderController@store');
+
     // Files
+    Route::post('/possession/file/upload/{id}', 'PossessionFileController@upload');
     Route::post('/possession/file/upload/temp', 'PossessionFileController@uploadTemp');
+
+    // Comments
+    Route::post('/possession/comment/store', 'PossessionCommentController@store');
 
     // Favorite
     Route::post('/possession/favorite/{id}', 'PossessionController@favorite');
